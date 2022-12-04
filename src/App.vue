@@ -21,7 +21,7 @@ export default {
                     se: {lat: 44.883658, lng: -92.993787}
                 },
                 neighborhood_markers: [
-                    {location: [44.942068, -93.020521], marker: null},
+                    {location: [44.942068, -93.020521], marker: ['Conway/Battlecreek/Highwood']},
                     {location: [44.977413, -93.025156], marker: null},
                     {location: [44.931244, -93.079578], marker: null},
                     {location: [44.956192, -93.060189], marker: null},
@@ -121,6 +121,14 @@ export default {
         </div>
     </div>
     <div v-show="view === 'map'">
+        <input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder" />
+        <select id="type" v-model="spotify_type">
+            <option v-for="opt in spotify_type_options" :value="opt.value">{{ opt.text }}</option>
+        </select>
+        <button type="button" @click="spotifySearch">Search</button>
+        <!--<SearchResult :result_array="search_results" />-->
+
+
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
