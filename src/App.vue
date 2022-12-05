@@ -5,9 +5,11 @@ export default {
     data() {
         return {
             view: 'map',
+            address_search: '',
             codes: [],
             neighborhoods: [],
             incidents: [],
+            search_results: [],
             leaflet: {
                 map: null,
                 center: {
@@ -86,7 +88,32 @@ export default {
                     }
                 });
             });
+        },
+
+        addressSearch(event) {
+            if (this.spotify_search !== '') {
+                console.log("Inside spotify search");
+                console.log(placeholder);
+                let req = {
+                    url: 'https://nominatim.openstreetmap.org/search?q=' + placeholder +
+                         '&format=json&limit=25&accept-language=en',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': this.auth_data.token_type + ' ' + this.auth_data.access_token
+                    },
+                    success: this.addressData
+                }
+                $.ajax(req);
+            }
+            else {
+                this.search_results = [];
+            }
+        },
+
+        addressData(data) {
+            this.search_results = data[this.spotify_type + 's'].items;
         }
+        
     },
     mounted() {
         this.leaflet.map = L.map('leafletmap').setView([this.leaflet.center.lat, this.leaflet.center.lng], this.leaflet.zoom);
@@ -121,15 +148,13 @@ export default {
         </div>
     </div>
     <div v-show="view === 'map'">
-        <input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder" />
-        <select id="type" v-model="spotify_type">
-            <option v-for="opt in spotify_type_options" :value="opt.value">{{ opt.text }}</option>
-        </select>
-        <button type="button" @click="spotifySearch">Search</button>
-        <!--<SearchResult :result_array="search_results" />-->
 
 
         <div class="grid-container">
+            <input id="search" type="text" v-model="address_search" :placeholder="input_placeholder" />
+            <button type="button" @click="addressSearch">Go</button>
+            <!--<SearchResult :result_array="search_results" />-->
+
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
             </div>
