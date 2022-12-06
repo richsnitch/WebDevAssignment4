@@ -1,10 +1,12 @@
 <script>
+import { isTemplateNode } from '@vue/compiler-core';
 import $ from 'jquery'
 
 export default {
     data() {
         return {
             view: 'map',
+            auth_data: {},
             address_search: '',
             codes: [],
             neighborhoods: [],
@@ -91,18 +93,19 @@ export default {
         },
 
         addressSearch(event) {
-            if (this.spotify_search !== '') {
+            if (this.address_search !== '') {
                 console.log("Inside spotify search");
-                console.log(placeholder);
+                console.log(this.address_search);
                 let req = {
-                    url: 'https://nominatim.openstreetmap.org/search?q=' + placeholder +
-                         '&format=json&limit=25&accept-language=en',
+                    url: 'https://nominatim.openstreetmap.org/search?q=' + this.address_search +
+                         '&format=json&limit=1&accept-language=en',
                     dataType: 'json',
                     headers: {
                         'Authorization': this.auth_data.token_type + ' ' + this.auth_data.access_token
                     },
                     success: this.addressData
                 }
+                console.log(req.url);
                 $.ajax(req);
             }
             else {
@@ -111,7 +114,13 @@ export default {
         },
 
         addressData(data) {
-            this.search_results = data[this.spotify_type + 's'].items;
+            this.search_results = data;
+
+            let longitude = data[0].lon;
+            let latitude = data[0].lat;
+
+            console.log(this.search_results);
+            //console.log(longitude);
         }
         
     },
@@ -152,7 +161,7 @@ export default {
 
         <div class="grid-container">
             <input id="search" type="text" v-model="address_search" :placeholder="input_placeholder" />
-            <button type="button" @click="addressSearch">Go</button>
+            <button class="blue" type="button" @click="addressSearch">Go</button>
             <!--<SearchResult :result_array="search_results" />-->
 
             <div class="grid-x grid-padding-x">
