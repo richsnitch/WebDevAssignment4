@@ -25,7 +25,7 @@ export default {
                     se: {lat: 44.883658, lng: -92.993787}
                 },
                 neighborhood_markers: [
-                    {location: [44.942068, -93.020521], marker: ['Conway/Battlecreek/Highwood']},
+                    {location: [44.942068, -93.020521], marker: null},
                     {location: [44.977413, -93.025156], marker: null},
                     {location: [44.931244, -93.079578], marker: null},
                     {location: [44.956192, -93.060189], marker: null},
@@ -126,7 +126,7 @@ export default {
                 var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:true}).addTo(this.leaflet.map)
                 .bindPopup(data[0].display_name);
                 
-                this.leaflet.map.flyTo([latitude, longitude], 16);
+                this.leaflet.map.flyTo([latitude, longitude], 15);
                 //this.leaflet.map.setView([latitude, longitude], 24);
             }
 
