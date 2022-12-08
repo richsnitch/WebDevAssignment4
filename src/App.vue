@@ -135,7 +135,7 @@ export default {
             if(longitude != null){
                 console.log("Inside");
                 
-                var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:true}).addTo(this.leaflet.map)
+                var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:false,draggable:false}).addTo(this.leaflet.map)
                 .bindPopup(data[0].display_name);
                 
                 this.leaflet.map.flyTo([latitude, longitude], 15);
