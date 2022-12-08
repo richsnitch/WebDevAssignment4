@@ -52,8 +52,20 @@ export default {
         },
 
         viewNewIncident(event) {
-            this.view = 'new_incident';
+            this.view = 'new_incident'; 
         },
+
+      /*
+        submit(){
+            //if you want to send any data into server before redirection then you can do it here
+            this.$router.push("/search?"+this.foobar);
+            }
+        },
+        submitClick(){
+            this.$router.push({path: '/search', query:{key: value}})
+        },
+      */
+   
 
         viewAbout(event) {
             this.view = 'about';
@@ -189,6 +201,25 @@ export default {
             <div class="grid-x grid-padding-x">
                 <h1 class="cell auto">New Incident Form</h1>
             </div>
+                <form>
+                    <label for="case_number">Case Number:</label><br>
+                    <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
+                    <label for="date">Date:</label><br>
+                    <input type="text" placeholder="Type here" id="date" name="date" required>
+                    <label for="time">Time:</label><br>
+                    <input type="text" placeholder="Type here" id="time" name="time" required>
+                    <label for="code">Code:</label><br>
+                    <input type="text" placeholder="Type here" id="code" name="code" required>
+                    <label for="incident">Incident:</label><br>
+                    <input type="text" placeholder="Type here" id="incident" name="incident" required>
+                    <label for="police_grid">Police Grid:</label><br>
+                    <input type="text" placeholder="Type here" id="police_grid" name="police_grid" required>
+                    <label for="neighborhood_number">Neighborhood Number:</label><br>
+                    <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
+                    <label for="block">Block:</label><br>
+                    <input type="text" placeholder="Type here" id="block" name="block" required>
+                    <button type="submit">Submit</button>
+                </form>
         </div>
     </div>
     <div v-if="view === 'about'">
