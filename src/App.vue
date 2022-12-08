@@ -99,6 +99,7 @@ export default {
                 let req = {
                     url: 'https://nominatim.openstreetmap.org/search?q=' + this.address_search +
                          '&format=json&limit=1&accept-language=en',
+                        //https://nominatim.openstreetmap.org/search?q=6738+Emerson+avenue+south,+Minneapolis&format=json&polygon=1&addressdetails=1&limit=1
                     dataType: 'json',
                     headers: {
                         'Authorization': this.auth_data.token_type + ' ' + this.auth_data.access_token
@@ -119,6 +120,16 @@ export default {
             let longitude = data[0].lon;
             let latitude = data[0].lat;
 
+            if(longitude != null){
+                console.log("Inside");
+                
+                var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:true}).addTo(this.leaflet.map)
+                .bindPopup(data[0].display_name);
+                
+                this.leaflet.map.flyTo([latitude, longitude], 16);
+                //this.leaflet.map.setView([latitude, longitude], 24);
+            }
+
             console.log(this.search_results);
             //console.log(longitude);
         }
@@ -132,7 +143,10 @@ export default {
             maxZoom: 18
         }).addTo(this.leaflet.map);
         this.leaflet.map.setMaxBounds([[44.883658, -93.217977], [45.008206, -92.993787]]);
-
+        /*if(this.longitude != null){
+            varmyMarker = L.marker([35.10418, -106.62987],
+            {title:"MyPoint",alt:"The Big I",draggable:true}).addTo(map);
+        }*/
         let district_boundary = new L.geoJson();
         district_boundary.addTo(this.leaflet.map);
 
