@@ -22,4 +22,22 @@ button {
     border-color: #2196F3;
     color: dodgerblue;
     border-radius: 5px;
-  }
+}
+
+.center {
+    align-items: center;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.floatleft {
+    float: left;
+}
+
+.names {
+    background-color: rgba(68, 68, 68, 0.562);
+}
+
+.video {
+    background-color: rgba(68, 68, 68, 0.562);
+}

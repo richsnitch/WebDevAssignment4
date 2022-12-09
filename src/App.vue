@@ -199,8 +199,9 @@ export default {
         <!-- Replace this with your actual form: can be done here or by making a new component -->
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto">New Incident Form</h1>
+                <h1 class="cell auto center" style="font-family:fantasy">New Incident Form</h1>
             </div>
+            <br/>
                 <form>
                     <label for="case_number">Case Number:</label><br>
                     <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
@@ -226,9 +227,89 @@ export default {
         <!-- Replace this with your actual about the project content: can be done here or by making a new component -->
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto">About the Project</h1>
+                <h1 class="cell auto center" style="font-family:fantasy">About the Project</h1>
+            </div>
+            <br/>
+        </div>
+
+        <div class="grid-container names">
+
+            <h1 class="cell auto center"> Who are we?</h1>
+            <div class="grid-x grid-padding-x">
+
+                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Joseph Schoen, and I am attending the University of St. Thomas as a senior.</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am studying Computer Science for my major, and Applied Statistics for my minor.</p>
+                    <br/>
+                    <h1>Goals After College:</h1>
+                    <p>I am currently enrolled into Optums TDP program, and hope to work in their Information Securities department.</p>
+                </div>
+            </div>
+            <br/>
+
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-12 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center ">
+                <h1>Name:</h1>
+                    <p>My name is Hayden Richards</p>
+                </div>
+            </div>
+            <br/>
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Audrey Jenkins</p>
+
+                </div>
+            </div>
+            <br/>
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Tara Sothy</p>
+                </div>
+            </div>
+            <br/>
+
+        </div>
+
+        <div class="grid-container">
+            <br/>
+            <br/>
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Tools Used</h1>
+            </div>
+
+            
+            <br/>
+            <br/>
+        </div>
+
+        <div class="grid-container video">
+
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Video Demo</h1>
             </div>
         </div>
+
+
+        <div class="grid-container">
+            <br/>
+            <br/>
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Six Interesting Things</h1>
+            </div>
+        </div>
+
     </div>
 </template>
 
