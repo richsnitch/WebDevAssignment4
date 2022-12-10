@@ -272,7 +272,7 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell center small-6 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Tara Sothy</p>
