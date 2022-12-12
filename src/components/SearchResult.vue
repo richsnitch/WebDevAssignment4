@@ -15,27 +15,24 @@ export default {
     <table>
         <thead>
             <tr>
-                <th>Rank</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Genres</th>
-                <th>Followers</th>
+                <th>Case Number</th>
+                <th>Date and Time</th>
+                <th>Code</th>
+                <th>Incident</th>
+                <th>Police Grid</th>
+                <th>Neighborhood Number</th>
+                <th>Block</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item, index) in result_array" :class="(index % 2 === 0) ? 'even' : 'odd'">
-                <td>{{ index+1 }}</td>
-                <td>  
-                    <img v-if="item.images.length > 0" :src="item.images[0].url" alt="Photo of artist" height="100"/>
-                    <div v-else class="no_img"></div>  
-                </td>
-                <td>{{ item.name }}</td>
-                <td>
-                    <ul>
-                        <li v-for="genre in item.genres">{{ genre }}</li>
-                    </ul>
-                </td>
-                <td>{{ item.followers.total }}</td>
+                <td>{{ item.case_number }}</td>
+                <td>{{ item.date_time }} </td>
+                <td>{{ item.code }}</td>
+                <td>{{ item.incident }}</td>
+                <td>{{ item.police_grid }}</td>
+                <td>{{ item.neighborhood_number }}</td>
+                <td>{{ item.block }}</td>
             </tr>
         </tbody>
     </table>

@@ -8,6 +8,7 @@ export default {
             codes: [],
             neighborhoods: [],
             incidents: [],
+            search_results: this.getJSON("/incidents"), 
             leaflet: {
                 map: null,
                 center: {
@@ -126,7 +127,7 @@ export default {
             <option v-for="opt in spotify_type_options" :value="opt.value">{{ opt.text }}</option>
         </select>
         <button type="button" @click="spotifySearch">Search</button>
-        <!--<SearchResult :result_array="search_results" />-->
+        <SearchResult :result_array="search_results" />
 
 
         <div class="grid-container">
