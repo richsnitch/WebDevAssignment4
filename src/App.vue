@@ -1,14 +1,17 @@
 <script>
+import { isTemplateNode } from '@vue/compiler-core';
 import $ from 'jquery'
 
 export default {
     data() {
         return {
             view: 'map',
+            auth_data: {},
+            address_search: '',
             codes: [],
             neighborhoods: [],
             incidents: [],
-            search_results: this.getJSON("/incidents"), 
+            search_results: [],
             leaflet: {
                 map: null,
                 center: {
@@ -22,7 +25,7 @@ export default {
                     se: {lat: 44.883658, lng: -92.993787}
                 },
                 neighborhood_markers: [
-                    {location: [44.942068, -93.020521], marker: ['Conway/Battlecreek/Highwood']},
+                    {location: [44.942068, -93.020521], marker: null},
                     {location: [44.977413, -93.025156], marker: null},
                     {location: [44.931244, -93.079578], marker: null},
                     {location: [44.956192, -93.060189], marker: null},
@@ -49,8 +52,20 @@ export default {
         },
 
         viewNewIncident(event) {
-            this.view = 'new_incident';
+            this.view = 'new_incident'; 
         },
+
+      /*
+        submit(){
+            //if you want to send any data into server before redirection then you can do it here
+            this.$router.push("/search?"+this.foobar);
+            }
+        },
+        submitClick(){
+            this.$router.push({path: '/search', query:{key: value}})
+        },
+      */
+   
 
         viewAbout(event) {
             this.view = 'about';
@@ -87,7 +102,50 @@ export default {
                     }
                 });
             });
+        },
+
+        addressSearch(event) {
+            if (this.address_search !== '') {
+                console.log("Inside spotify search");
+                console.log(this.address_search);
+                let req = {
+                    url: 'https://nominatim.openstreetmap.org/search?q=' + this.address_search +
+                         '&format=json&limit=1&accept-language=en',
+                        //https://nominatim.openstreetmap.org/search?q=6738+Emerson+avenue+south,+Minneapolis&format=json&polygon=1&addressdetails=1&limit=1
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': this.auth_data.token_type + ' ' + this.auth_data.access_token
+                    },
+                    success: this.addressData
+                }
+                console.log(req.url);
+                $.ajax(req);
+            }
+            else {
+                this.search_results = [];
+            }
+        },
+
+        addressData(data) {
+            this.search_results = data;
+
+            let longitude = data[0].lon;
+            let latitude = data[0].lat;
+
+            if(longitude != null){
+                console.log("Inside");
+                
+                var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:false,draggable:false}).addTo(this.leaflet.map)
+                .bindPopup(data[0].display_name);
+                
+                this.leaflet.map.flyTo([latitude, longitude], 15);
+                //this.leaflet.map.setView([latitude, longitude], 24);
+            }
+
+            console.log(this.search_results);
+            //console.log(longitude);
         }
+        
     },
     mounted() {
         this.leaflet.map = L.map('leafletmap').setView([this.leaflet.center.lat, this.leaflet.center.lng], this.leaflet.zoom);
@@ -97,7 +155,10 @@ export default {
             maxZoom: 18
         }).addTo(this.leaflet.map);
         this.leaflet.map.setMaxBounds([[44.883658, -93.217977], [45.008206, -92.993787]]);
-
+        /*if(this.longitude != null){
+            varmyMarker = L.marker([35.10418, -106.62987],
+            {title:"MyPoint",alt:"The Big I",draggable:true}).addTo(map);
+        }*/
         let district_boundary = new L.geoJson();
         district_boundary.addTo(this.leaflet.map);
 
@@ -131,6 +192,10 @@ export default {
 
 
         <div class="grid-container">
+            <input id="search" type="text" v-model="address_search" :placeholder="input_placeholder" />
+            <button class="blue" type="button" @click="addressSearch">Go</button>
+            <!--<SearchResult :result_array="search_results" />-->
+
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
             </div>
@@ -140,17 +205,117 @@ export default {
         <!-- Replace this with your actual form: can be done here or by making a new component -->
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto">New Incident Form</h1>
+                <h1 class="cell auto center" style="font-family:fantasy">New Incident Form</h1>
             </div>
+            <br/>
+                <form>
+                    <label for="case_number">Case Number:</label><br>
+                    <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
+                    <label for="date">Date:</label><br>
+                    <input type="text" placeholder="Type here" id="date" name="date" required>
+                    <label for="time">Time:</label><br>
+                    <input type="text" placeholder="Type here" id="time" name="time" required>
+                    <label for="code">Code:</label><br>
+                    <input type="text" placeholder="Type here" id="code" name="code" required>
+                    <label for="incident">Incident:</label><br>
+                    <input type="text" placeholder="Type here" id="incident" name="incident" required>
+                    <label for="police_grid">Police Grid:</label><br>
+                    <input type="text" placeholder="Type here" id="police_grid" name="police_grid" required>
+                    <label for="neighborhood_number">Neighborhood Number:</label><br>
+                    <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
+                    <label for="block">Block:</label><br>
+                    <input type="text" placeholder="Type here" id="block" name="block" required>
+                    <button type="submit">Submit</button>
+                </form>
         </div>
     </div>
     <div v-if="view === 'about'">
         <!-- Replace this with your actual about the project content: can be done here or by making a new component -->
         <div class="grid-container">
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto">About the Project</h1>
+                <h1 class="cell auto center" style="font-family:fantasy">About the Project</h1>
+            </div>
+            <br/>
+        </div>
+
+        <div class="grid-container names">
+
+            <h1 class="cell auto center"> Who are we?</h1>
+            <div class="grid-x grid-padding-x">
+
+                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Joseph Schoen, and I am attending the University of St. Thomas as a senior.</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am studying Computer Science for my major, and Applied Statistics for my minor.</p>
+                    <br/>
+                    <h1>Goals After College:</h1>
+                    <p>I am currently enrolled into Optums TDP program, and hope to work in their Information Securities department.</p>
+                </div>
+            </div>
+            <br/>
+
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-12 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center ">
+                <h1>Name:</h1>
+                    <p>My name is Hayden Richards</p>
+                </div>
+            </div>
+            <br/>
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Audrey Jenkins</p>
+
+                </div>
+            </div>
+            <br/>
+
+            <div class="grid-x grid-padding-x">
+                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-6 large-6 ">
+                    <h1>Name:</h1>
+                    <p>My name is Tara Sothy</p>
+                </div>
+            </div>
+            <br/>
+
+        </div>
+
+        <div class="grid-container">
+            <br/>
+            <br/>
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Tools Used</h1>
+            </div>
+
+            
+            <br/>
+            <br/>
+        </div>
+
+        <div class="grid-container video">
+
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Video Demo</h1>
             </div>
         </div>
+
+
+        <div class="grid-container">
+            <br/>
+            <br/>
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Six Interesting Things</h1>
+            </div>
+        </div>
+
     </div>
 </template>
 
