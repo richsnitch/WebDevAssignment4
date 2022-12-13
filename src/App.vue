@@ -253,10 +253,17 @@ export default {
 
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell small-12 large-6 center ">
                 <h1>Name:</h1>
-                    <p>My name is Hayden Richards</p>
+                    <p>My name is Hayden Richards, and I am junior at the University of St. Thomas!</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am majoring in Computer Science, while double minoring in both Teacher Education and Applied Statistics.</p>
+                    <h1>Goals After College:</h1>
+                    <p>My main goal as of now is to graduate with a Bachelor's in Computer Science! I am currently undecided in what I want
+                        to pursue as far as a career in the computer science field. However, game development would be a dream job of mine.
+                    </p>
                 </div>
             </div>
             <br/>
