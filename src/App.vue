@@ -187,11 +187,11 @@ export default {
         </div>
     </div>
     <div v-show="view === 'map'">
-        <input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder" />
+        <!--<input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder" />
         <select id="type" v-model="spotify_type">
             <option v-for="opt in spotify_type_options" :value="opt.value">{{ opt.text }}</option>
         </select>
-        <button type="button" @click="spotifySearch">Search</button>
+        <button type="button" @click="spotifySearch">Search</button>-->
 
 
         <div class="grid-container">
