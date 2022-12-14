@@ -1,7 +1,22 @@
 <script>
 import { isTemplateNode } from '@vue/compiler-core';
 import $ from 'jquery'
+import axios from "axios";
+            /*let case_number = document.getElementById("case_number").value;
+            let date = document.getElementById("date").value;
+            let time = document.getElementById("time").value;
+            let code = document.getElementById("code").value;
+            let incident = document.getElementById("incident").value;
+            let police_grid = document.getElementById("police_grid").value;
+            let neighborhood_number = document.getElementById("neighborhood_number").value;
+            let block = document.getElementById("block").value;
 
+            var queryString = "?case_number=" + case_number + "&date=" + date + "&time=" + time + "&code=" + code + 
+            "&incident=" + incident + "&police_grid=" + police_grid + "&neighborhood_number=" + neighborhood_number + "&block=" + block;
+            
+            document.forms[0].action = "submit.php" + queryString;
+            document.forms[0].submit();
+            alert("New incident submitted!");*/
 export default {
     data() {
         return {
@@ -12,6 +27,14 @@ export default {
             neighborhoods: [],
             incidents: [],
             search_results: [],
+            case_number: "",
+            date: "",
+            time: "",
+            code: "",
+            incident: "",
+            police_grid: "",
+            neighborhood_number: "",
+            block: "",
             leaflet: {
                 map: null,
                 center: {
@@ -55,17 +78,49 @@ export default {
             this.view = 'new_incident'; 
         },
 
-      /*
-        submit(){
-            //if you want to send any data into server before redirection then you can do it here
-            this.$router.push("/search?"+this.foobar);
-            }
+        submitForm(){
+            alert("Success!")
+            const formData = {
+                case_number: this.case_number,
+                date: this.name,
+                time: this.time,
+                code: this.code,
+                incident: this.incident,
+                police_grid: this.police_grid,
+                neighborhood_number: this.neighborhood_number,
+                block: this.block,
+            };
+            console.log(this.case_number);
+            axios.put("/new-incident", formData).then((response) => {
+                if (response.status === 200){
+                    //Success!
+                    console.log("Success");
+                }else{
+                    //Error
+                    console.log("Error submitting new request.");
+                }
+            })
         },
-        submitClick(){
-            this.$router.push({path: '/search', query:{key: value}})
-        },
-      */
-   
+   /*    const formData = {
+                case_number: this.case_number,
+                date: this.name,
+                time: this.time,
+                code: this.code,
+                incident: this.incident,
+                police_grid: this.police_grid,
+                neighborhood_number: this.neighborhood_number,
+                block: this.block,
+            };
+            console.log(this.case_number);
+            axios.put("/new-incident", formData).then((response) => {
+                if (response.status === 200){
+                    //Success!
+                    alert("Success!")
+                }else{
+                    //Error
+                    alert("Error submitting new request.")
+                }
+            })*/
 
         viewAbout(event) {
             this.view = 'about';
@@ -219,7 +274,7 @@ export default {
                     <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
                     <label for="block">Block:</label><br>
                     <input type="text" placeholder="Type here" id="block" name="block" required>
-                    <button type="submit">Submit</button>
+                    <button type="button" v-on:click="submitForm()">Submit</button>
                 </form>
         </div>
     </div>
@@ -256,10 +311,10 @@ export default {
                 <div class="cell small-12 large-6 center"><img src ="images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell small-12 large-6 center ">
                 <h1>Name:</h1>
-                    <p>My name is Hayden Richards, and I am junior at the University of St. Thomas!</p>
+                    <p>My name is Hayden Richards, and I am a junior at the University of St. Thomas!</p>
                     <br/>
                     <h1>Studies:</h1>
-                    <p>I am majoring in Computer Science, while double minoring in both Teacher Education and Applied Statistics.</p>
+                    <p>I am majoring in Computer Science, while double minoring in Teacher Education and Applied Statistics.</p>
                     <h1>Goals After College:</h1>
                     <p>My main goal as of now is to graduate with a Bachelor's in Computer Science! I am currently undecided in what I want
                         to pursue as far as a career in the computer science field. However, game development would be a dream job of mine.
@@ -318,6 +373,8 @@ export default {
         </div>
 
     </div>
+
+    
 </template>
 
 <style>
@@ -340,3 +397,5 @@ export default {
     cursor: pointer;
 }
 </style>
+
+ 
