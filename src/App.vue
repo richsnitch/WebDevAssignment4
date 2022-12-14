@@ -49,7 +49,7 @@ export default {
                     se: {lat: 44.883658, lng: -92.993787}
                 },
                 neighborhood_markers: [
-                    {location: [44.942068, -93.020521], marker: null},
+                    {location: [44.942068, -93.020521], marker: null}, //.addTo(this.leaflet.map) //onMap: true
                     {location: [44.977413, -93.025156], marker: null},
                     {location: [44.931244, -93.079578], marker: null},
                     {location: [44.956192, -93.060189], marker: null},
@@ -164,6 +164,7 @@ export default {
         },
 
         addressSearch(event) {
+        
             if (this.address_search !== '') {
                 console.log("Inside address search");
                 console.log(this.address_search);
@@ -191,7 +192,8 @@ export default {
             let longitude = data[0].lon;
             let latitude = data[0].lat;
 
-            if(longitude != null){
+            
+            if(longitude != null && latitude != null){
                 console.log("Inside");
                 
                 var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:false,draggable:false}).addTo(this.leaflet.map)
@@ -202,7 +204,17 @@ export default {
             }
 
             console.log(this.search_results);
+            
             //console.log(longitude);
+        },
+        updateNeighbors(){
+            //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
+            console.log("Inside");
+            
+            for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
+                this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location).addTo(this.leaflet.map);
+            }
+            console.log(this.leaflet.neighborhood_markers[0]);
         }
         
     },
@@ -214,21 +226,28 @@ export default {
             maxZoom: 18
         }).addTo(this.leaflet.map);
         this.leaflet.map.setMaxBounds([[44.883658, -93.217977], [45.008206, -92.993787]]);
-        /*if(this.longitude != null){
-            varmyMarker = L.marker([35.10418, -106.62987],
-            {title:"MyPoint",alt:"The Big I",draggable:true}).addTo(map);
-        }*/
         let district_boundary = new L.geoJson();
         district_boundary.addTo(this.leaflet.map);
+
+
+        this.updateNeighbors();
 
         this.getJSON('/data/StPaulDistrictCouncil.geojson').then((result) => {
             // St. Paul GeoJSON
             $(result.features).each((key, value) => {
                 district_boundary.addData(value);
             });
+
+            /*for(i=0; i<this.neighborhood_markers.length; i++){
+                var newMarker = L.marker(this.neighborhood_markers[i]).addTo(this.leaflet.map);
+            }*/
+
+
         }).catch((error) => {
             console.log('Error:', error);
         });
+
+        var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
     }
 }
 </script>
