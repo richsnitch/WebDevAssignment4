@@ -1,5 +1,6 @@
 <script>
 import { isTemplateNode } from '@vue/compiler-core';
+import SearchResult from './components/SearchResult.vue'
 import $ from 'jquery'
 import axios from "axios";
             /*let case_number = document.getElementById("case_number").value;
@@ -68,6 +69,9 @@ export default {
                 ]
             }
         };
+    },
+    components: {
+        SearchResult
     },
     methods: {
         viewMap(event) {
@@ -161,7 +165,7 @@ export default {
 
         addressSearch(event) {
             if (this.address_search !== '') {
-                console.log("Inside spotify search");
+                console.log("Inside address search");
                 console.log(this.address_search);
                 let req = {
                     url: 'https://nominatim.openstreetmap.org/search?q=' + this.address_search +
@@ -238,16 +242,22 @@ export default {
         </div>
     </div>
     <div v-show="view === 'map'">
+        <!--<input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder" />
+        <select id="type" v-model="spotify_type">
+            <option v-for="opt in spotify_type_options" :value="opt.value">{{ opt.text }}</option>
+        </select>
+        <button type="button" @click="spotifySearch">Search</button>-->
 
 
         <div class="grid-container">
             <input id="search" type="text" v-model="address_search" :placeholder="input_placeholder" />
             <button class="blue" type="button" @click="addressSearch">Go</button>
-            <!--<SearchResult :result_array="search_results" />-->
 
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
             </div>
+
+            <SearchResult :result_array="search_results" />
         </div>
     </div>
     <div v-if="view === 'new_incident'">
@@ -334,7 +344,7 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Tara Sothy"/></div> 
                 <div class="cell center small-6 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Tara Sothy</p>
