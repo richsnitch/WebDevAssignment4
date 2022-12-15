@@ -28,6 +28,7 @@ export default {
             neighborhoods: [],
             incidents: [],
             search_results: [],
+            incident_results: [],
             case_number: "",
             date: "",
             time: "",
@@ -259,7 +260,7 @@ export default {
         .then((response) => {
             //incidents which are on map
             console.log(response);
-            this.search_results = response;
+            this.incident_results = response;
         }).catch((err)=> {
             console.log(err);
         });
@@ -292,7 +293,7 @@ export default {
                 <div id="leafletmap" class="cell auto"></div>
             </div>
 
-            <SearchResult :result_array="search_results" />
+            <SearchResult :result_array="incident_results" />
         </div>
     </div>
     <div v-if="view === 'new_incident'">
