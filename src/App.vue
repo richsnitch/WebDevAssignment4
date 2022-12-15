@@ -124,6 +124,12 @@ export default {
                 }
                 console.log(req.url);
                 $.ajax(req);
+
+                this.getJSON('/incidents?id=2,4').then((response) => {
+                    console.log(response);
+                }).catch((err) => {
+                    console.log(err);
+                });
             }
             else {
                 this.search_results = [];
@@ -174,6 +180,16 @@ export default {
         }).catch((error) => {
             console.log('Error:', error);
         });
+
+        this.getJSON('http://localhost:8000/incidents?neighborhood_number=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17&limit=100')
+        .then((response) => {
+            //incidents which are on map
+            console.log(response);
+            this.search_results = response;
+        }).catch((err)=> {
+            console.log(err);
+        });
+
     }
 }
 </script>
@@ -247,7 +263,7 @@ export default {
             <h1 class="cell auto center"> Who are we?</h1>
             <div class="grid-x grid-padding-x">
 
-                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-6 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell center small-6 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Joseph Schoen, and I am attending the University of St. Thomas as a senior.</p>
@@ -263,7 +279,7 @@ export default {
 
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="../images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell small-12 large-6 center ">
                 <h1>Name:</h1>
                     <p>My name is Hayden Richards, and I am junior at the University of St. Thomas!</p>
@@ -279,7 +295,7 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-6 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell center small-6 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Audrey Jenkins</p>
@@ -289,10 +305,18 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Tara Sothy"/></div> 
+                <div class="cell small-6 large-6 center"><img src ="../images/picoftara.jpeg" class="floatleft" alt="Picture of Tara Sothy"/></div> 
                 <div class="cell center small-6 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Tara Sothy</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am majoring in Computer Science, while double minoring in both Data Analytics and Applied Statistics.</p>
+                    <h1>Goals After College:</h1>
+                    <p>Once I graduate (in just a few days here) I'll soon start a job as an associate software developer
+                        My main goal as of now is to graduate with a Bachelor's in Computer Science! I am currently undecided in what I want
+                        to pursue as far as a career in the computer science field. However, game development would be a dream job of mine.
+                    </p>
                 </div>
             </div>
             <br/>

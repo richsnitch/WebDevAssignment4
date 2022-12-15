@@ -27,7 +27,7 @@ export default {
         <tbody>
             <tr v-for="(item, index) in result_array" :class="(index % 2 === 0) ? 'even' : 'odd'">
                 <td>{{ item.case_number }}</td>
-                <td>{{ item.date_time }} </td>
+                <td>{{ item.date }}  {{ item.time }} </td>
                 <td>{{ item.code }}</td>
                 <td>{{ item.incident }}</td>
                 <td>{{ item.police_grid }}</td>
