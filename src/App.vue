@@ -2,7 +2,22 @@
 import { isTemplateNode } from '@vue/compiler-core';
 import SearchResult from './components/SearchResult.vue'
 import $ from 'jquery'
+import axios from "axios";
+            /*let case_number = document.getElementById("case_number").value;
+            let date = document.getElementById("date").value;
+            let time = document.getElementById("time").value;
+            let code = document.getElementById("code").value;
+            let incident = document.getElementById("incident").value;
+            let police_grid = document.getElementById("police_grid").value;
+            let neighborhood_number = document.getElementById("neighborhood_number").value;
+            let block = document.getElementById("block").value;
 
+            var queryString = "?case_number=" + case_number + "&date=" + date + "&time=" + time + "&code=" + code + 
+            "&incident=" + incident + "&police_grid=" + police_grid + "&neighborhood_number=" + neighborhood_number + "&block=" + block;
+            
+            document.forms[0].action = "submit.php" + queryString;
+            document.forms[0].submit();
+            alert("New incident submitted!");*/
 export default {
     data() {
         return {
@@ -13,6 +28,14 @@ export default {
             neighborhoods: [],
             incidents: [],
             search_results: [],
+            case_number: "",
+            date: "",
+            time: "",
+            code: "",
+            incident: "",
+            police_grid: "",
+            neighborhood_number: "",
+            block: "",
             leaflet: {
                 map: null,
                 center: {
@@ -26,7 +49,7 @@ export default {
                     se: {lat: 44.883658, lng: -92.993787}
                 },
                 neighborhood_markers: [
-                    {location: [44.942068, -93.020521], marker: null},
+                    {location: [44.942068, -93.020521], marker: null}, //.addTo(this.leaflet.map) //onMap: true
                     {location: [44.977413, -93.025156], marker: null},
                     {location: [44.931244, -93.079578], marker: null},
                     {location: [44.956192, -93.060189], marker: null},
@@ -59,17 +82,49 @@ export default {
             this.view = 'new_incident'; 
         },
 
-      /*
-        submit(){
-            //if you want to send any data into server before redirection then you can do it here
-            this.$router.push("/search?"+this.foobar);
-            }
+        submitForm(){
+            alert("Success!")
+            const formData = {
+                case_number: this.case_number,
+                date: this.name,
+                time: this.time,
+                code: this.code,
+                incident: this.incident,
+                police_grid: this.police_grid,
+                neighborhood_number: this.neighborhood_number,
+                block: this.block,
+            };
+            console.log(this.case_number);
+            axios.put("/new-incident", formData).then((response) => {
+                if (response.status === 200){
+                    //Success!
+                    console.log("Success");
+                }else{
+                    //Error
+                    console.log("Error submitting new request.");
+                }
+            })
         },
-        submitClick(){
-            this.$router.push({path: '/search', query:{key: value}})
-        },
-      */
-   
+   /*    const formData = {
+                case_number: this.case_number,
+                date: this.name,
+                time: this.time,
+                code: this.code,
+                incident: this.incident,
+                police_grid: this.police_grid,
+                neighborhood_number: this.neighborhood_number,
+                block: this.block,
+            };
+            console.log(this.case_number);
+            axios.put("/new-incident", formData).then((response) => {
+                if (response.status === 200){
+                    //Success!
+                    alert("Success!")
+                }else{
+                    //Error
+                    alert("Error submitting new request.")
+                }
+            })*/
 
         viewAbout(event) {
             this.view = 'about';
@@ -109,6 +164,7 @@ export default {
         },
 
         addressSearch(event) {
+        
             if (this.address_search !== '') {
                 console.log("Inside address search");
                 console.log(this.address_search);
@@ -142,7 +198,8 @@ export default {
             let longitude = data[0].lon;
             let latitude = data[0].lat;
 
-            if(longitude != null){
+            
+            if(longitude != null && latitude != null){
                 console.log("Inside");
                 
                 var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:false,draggable:false}).addTo(this.leaflet.map)
@@ -153,7 +210,17 @@ export default {
             }
 
             console.log(this.search_results);
+            
             //console.log(longitude);
+        },
+        updateNeighbors(){
+            //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
+            //console.log("Inside");
+            
+            for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
+                this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location).addTo(this.leaflet.map);
+            }
+            //console.log(this.leaflet.neighborhood_markers[0]);
         }
         
     },
@@ -165,21 +232,28 @@ export default {
             maxZoom: 18
         }).addTo(this.leaflet.map);
         this.leaflet.map.setMaxBounds([[44.883658, -93.217977], [45.008206, -92.993787]]);
-        /*if(this.longitude != null){
-            varmyMarker = L.marker([35.10418, -106.62987],
-            {title:"MyPoint",alt:"The Big I",draggable:true}).addTo(map);
-        }*/
         let district_boundary = new L.geoJson();
         district_boundary.addTo(this.leaflet.map);
+
+
+        this.updateNeighbors();
 
         this.getJSON('/data/StPaulDistrictCouncil.geojson').then((result) => {
             // St. Paul GeoJSON
             $(result.features).each((key, value) => {
                 district_boundary.addData(value);
             });
+
+            /*for(i=0; i<this.neighborhood_markers.length; i++){
+                var newMarker = L.marker(this.neighborhood_markers[i]).addTo(this.leaflet.map);
+            }*/
+
+
         }).catch((error) => {
             console.log('Error:', error);
         });
+
+        var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
 
         this.getJSON('http://localhost:8000/incidents?neighborhood_number=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17&limit=100')
         .then((response) => {
@@ -245,7 +319,7 @@ export default {
                     <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
                     <label for="block">Block:</label><br>
                     <input type="text" placeholder="Type here" id="block" name="block" required>
-                    <button type="submit">Submit</button>
+                    <button type="button" v-on:click="submitForm()">Submit</button>
                 </form>
         </div>
     </div>
@@ -258,13 +332,13 @@ export default {
             <br/>
         </div>
 
-        <div class="grid-container names">
+        <div class="grid-container names rcor">
 
             <h1 class="cell auto center"> Who are we?</h1>
             <div class="grid-x grid-padding-x">
 
-                <div class="cell small-6 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Joseph Schoen, and I am attending the University of St. Thomas as a senior.</p>
                     <br/>
@@ -279,13 +353,13 @@ export default {
 
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="../images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="../images/picofhayden.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell small-12 large-6 center ">
                 <h1>Name:</h1>
-                    <p>My name is Hayden Richards, and I am junior at the University of St. Thomas!</p>
+                    <p>My name is Hayden Richards, and I am a junior at the University of St. Thomas!</p>
                     <br/>
                     <h1>Studies:</h1>
-                    <p>I am majoring in Computer Science, while double minoring in both Teacher Education and Applied Statistics.</p>
+                    <p>I am majoring in Computer Science, while double minoring in Teacher Education and Applied Statistics.</p>
                     <h1>Goals After College:</h1>
                     <p>My main goal as of now is to graduate with a Bachelor's in Computer Science! I am currently undecided in what I want
                         to pursue as far as a career in the computer science field. However, game development would be a dream job of mine.
@@ -295,8 +369,8 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Audrey Jenkins</p>
 
@@ -305,8 +379,8 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="../images/picoftara.jpeg" class="floatleft" alt="Picture of Tara Sothy"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="../images/picoftara.jpeg" class="floatleft rcor" alt="Picture of Tara Sothy"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Tara Sothy</p>
                     <br/>
@@ -327,7 +401,42 @@ export default {
             <br/>
             <br/>
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto center">Tools Used</h1>
+                <h1 class="cell large-12 center">Tools Used</h1>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Nominatim API</strong>
+                        <br/>
+                        By using the Nominatim API, this gives us the capability to make a search for a location, and taking
+                        that search information, placing it into a URL, and then getting an actual longitude and latitude to use.
+                    </p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Leaflet API</strong>
+                        <br/>
+                        Using the Leaflet API, this gave us the capability to create an interactive map. This map was heavily used
+                        for displaying a visual representation of the different neighborhoods, showing the location that was searched
+                        by marking it, and also visually chosing an area on the map to see the crime cases in that location/neighborhoods.
+                    </p>
+                </div>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>St. Paul Crime API</strong>
+                        <br/>
+                        This API was created by us through a St. Paul Crime dataset. This dataset includes all the crime's documented through
+                        the city of St. Paul from August 2014, to May 2022. With 420,162 crime entries documented, this contains lots of information!
+                        We used this API to display the crimes commited in an area, by using the search features from Nominatim and the live map frame!
+                    </p>
+                </div>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Foundation Framework</strong>
+                        <br/>
+                        This framework was used for stying the visual aspect of the website. This is focused in on the HTML side of the website.
+                        It allows for a custom grid to work with when organizing objects on a website. That way, whether on a phone, tablet, desktop,
+                        or some other device, it is custom to the size of the screen to make it well sorted for the user to read.
+                    </p>
+                
+                </div>
             </div>
 
             
@@ -335,7 +444,7 @@ export default {
             <br/>
         </div>
 
-        <div class="grid-container video">
+        <div class="grid-container video rcor">
 
             <div class="grid-x grid-padding-x">
                 <h1 class="cell auto center">Video Demo</h1>
@@ -347,20 +456,51 @@ export default {
             <br/>
             <br/>
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto center">Six Interesting Things</h1>
+                <h1 class="cell small-12 large-12 center">Six Interesting Things</h1>
+
+                <div class="cell small-12 large-6 center">
+                    <p>The first thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The second thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The third thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The fourth thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The fifth thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The sixth thing</p>
+                </div>
             </div>
+            <br/>
         </div>
 
+        <div class="grid-container names rcor">
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Thanks!</h1>
+                <div class="cell small-12 large-12 center"><img src ="images/family.png" class="rcor" alt="Picture of Joseph Schoen"/></div>
+            </div>
+            <br/>
+        </div>
+        <br/>
+
     </div>
+
+    
 </template>
 
 <style>
 #leafletmap {
-    height: 500px;
+    height: 600px;
 }
-
 .selected {
     background-color: rgb(10, 100, 126);
+    border-radius: 20px;
     color: white;
     border: solid 1px white;
     text-align: center;
@@ -368,9 +508,12 @@ export default {
 }
 .unselected {
     background-color: rgb(200, 200, 200);
+    border-radius: 20px;
     color: black;
     border: solid 1px white;
     text-align: center;
     cursor: pointer;
 }
 </style>
+
+ 
