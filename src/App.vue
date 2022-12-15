@@ -209,12 +209,12 @@ export default {
         },
         updateNeighbors(){
             //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
-            console.log("Inside");
+            //console.log("Inside");
             
             for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
                 this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location).addTo(this.leaflet.map);
             }
-            console.log(this.leaflet.neighborhood_markers[0]);
+            //console.log(this.leaflet.neighborhood_markers[0]);
         }
         
     },
@@ -316,13 +316,13 @@ export default {
             <br/>
         </div>
 
-        <div class="grid-container names">
+        <div class="grid-container names rcor">
 
             <h1 class="cell auto center"> Who are we?</h1>
             <div class="grid-x grid-padding-x">
 
-                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Joseph Schoen, and I am attending the University of St. Thomas as a senior.</p>
                     <br/>
@@ -337,7 +337,7 @@ export default {
 
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="images/picofhayden.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="images/picofhayden.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell small-12 large-6 center ">
                 <h1>Name:</h1>
                     <p>My name is Hayden Richards, and I am a junior at the University of St. Thomas!</p>
@@ -353,8 +353,8 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft" alt="Picture of Joseph Schoen"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Audrey Jenkins</p>
 
@@ -363,8 +363,8 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-6 large-6 center"><img src ="images/picoftara.png" class="floatleft" alt="Picture of Tara Sothy"/></div> 
-                <div class="cell center small-6 large-6 ">
+                <div class="cell small-12 large-6 center"><img src ="images/picoftara.png" class="floatleft rcor" alt="Picture of Tara Sothy"/></div> 
+                <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Tara Sothy</p>
                 </div>
@@ -377,7 +377,42 @@ export default {
             <br/>
             <br/>
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto center">Tools Used</h1>
+                <h1 class="cell large-12 center">Tools Used</h1>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Nominatim API</strong>
+                        <br/>
+                        By using the Nominatim API, this gives us the capability to make a search for a location, and taking
+                        that search information, placing it into a URL, and then getting an actual longitude and latitude to use.
+                    </p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Leaflet API</strong>
+                        <br/>
+                        Using the Leaflet API, this gave us the capability to create an interactive map. This map was heavily used
+                        for displaying a visual representation of the different neighborhoods, showing the location that was searched
+                        by marking it, and also visually chosing an area on the map to see the crime cases in that location/neighborhoods.
+                    </p>
+                </div>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>St. Paul Crime API</strong>
+                        <br/>
+                        This API was created by us through a St. Paul Crime dataset. This dataset includes all the crime's documented through
+                        the city of St. Paul from August 2014, to May 2022. With 420,162 crime entries documented, this contains lots of information!
+                        We used this API to display the crimes commited in an area, by using the search features from Nominatim and the live map frame!
+                    </p>
+                </div>
+
+                <div class="cell small-12 large-6 center">
+                    <p><strong>Foundation Framework</strong>
+                        <br/>
+                        This framework was used for stying the visual aspect of the website. This is focused in on the HTML side of the website.
+                        It allows for a custom grid to work with when organizing objects on a website. That way, whether on a phone, tablet, desktop,
+                        or some other device, it is custom to the size of the screen to make it well sorted for the user to read.
+                    </p>
+                
+                </div>
             </div>
 
             
@@ -385,7 +420,7 @@ export default {
             <br/>
         </div>
 
-        <div class="grid-container video">
+        <div class="grid-container video rcor">
 
             <div class="grid-x grid-padding-x">
                 <h1 class="cell auto center">Video Demo</h1>
@@ -397,9 +432,38 @@ export default {
             <br/>
             <br/>
             <div class="grid-x grid-padding-x">
-                <h1 class="cell auto center">Six Interesting Things</h1>
+                <h1 class="cell small-12 large-12 center">Six Interesting Things</h1>
+
+                <div class="cell small-12 large-6 center">
+                    <p>The first thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The second thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The third thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The fourth thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The fifth thing</p>
+                </div>
+                <div class="cell small-12 large-6 center">
+                    <p>The sixth thing</p>
+                </div>
             </div>
+            <br/>
         </div>
+
+        <div class="grid-container names rcor">
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center">Thanks!</h1>
+                <div class="cell small-12 large-12 center"><img src ="images/family.png" class="rcor" alt="Picture of Joseph Schoen"/></div>
+            </div>
+            <br/>
+        </div>
+        <br/>
 
     </div>
 
@@ -408,11 +472,11 @@ export default {
 
 <style>
 #leafletmap {
-    height: 500px;
+    height: 600px;
 }
-
 .selected {
     background-color: rgb(10, 100, 126);
+    border-radius: 20px;
     color: white;
     border: solid 1px white;
     text-align: center;
@@ -420,6 +484,7 @@ export default {
 }
 .unselected {
     background-color: rgb(200, 200, 200);
+    border-radius: 20px;
     color: black;
     border: solid 1px white;
     text-align: center;

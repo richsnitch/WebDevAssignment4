@@ -41,3 +41,10 @@ button {
 .video {
     background-color: rgba(68, 68, 68, 0.562);
 }
+
+.rcor{
+    border-radius:20px
+}
+.background{
+    background-color: #212121;
+}
