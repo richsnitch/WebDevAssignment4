@@ -3,21 +3,7 @@ import { isTemplateNode } from '@vue/compiler-core';
 import SearchResult from './components/SearchResult.vue'
 import $ from 'jquery'
 import axios from "axios";
-            /*let case_number = document.getElementById("case_number").value;
-            let date = document.getElementById("date").value;
-            let time = document.getElementById("time").value;
-            let code = document.getElementById("code").value;
-            let incident = document.getElementById("incident").value;
-            let police_grid = document.getElementById("police_grid").value;
-            let neighborhood_number = document.getElementById("neighborhood_number").value;
-            let block = document.getElementById("block").value;
 
-            var queryString = "?case_number=" + case_number + "&date=" + date + "&time=" + time + "&code=" + code + 
-            "&incident=" + incident + "&police_grid=" + police_grid + "&neighborhood_number=" + neighborhood_number + "&block=" + block;
-            
-            document.forms[0].action = "submit.php" + queryString;
-            document.forms[0].submit();
-            alert("New incident submitted!");*/
 export default {
     data() {
         return {
@@ -84,7 +70,6 @@ export default {
         },
 
         submitForm(){
-            alert("Success!")
             const formData = {
                 case_number: this.case_number,
                 date: this.name,
@@ -95,9 +80,8 @@ export default {
                 neighborhood_number: this.neighborhood_number,
                 block: this.block,
             };
-            console.log(this.case_number);
             axios.put("/new-incident", formData).then((response) => {
-                if (response.status === 200){
+                if (response.status >= 200 && response.status < 300){
                     //Success!
                     console.log("Success");
                 }else{
@@ -105,27 +89,11 @@ export default {
                     console.log("Error submitting new request.");
                 }
             })
+            .catch((error) => {
+                console.log(error);
+            })
+            this.$refs.form.reset(); //deletes all items inputted into the form on the webpage
         },
-   /*    const formData = {
-                case_number: this.case_number,
-                date: this.name,
-                time: this.time,
-                code: this.code,
-                incident: this.incident,
-                police_grid: this.police_grid,
-                neighborhood_number: this.neighborhood_number,
-                block: this.block,
-            };
-            console.log(this.case_number);
-            axios.put("/new-incident", formData).then((response) => {
-                if (response.status === 200){
-                    //Success!
-                    alert("Success!")
-                }else{
-                    //Error
-                    alert("Error submitting new request.")
-                }
-            })*/
 
         viewAbout(event) {
             this.view = 'about';
@@ -332,7 +300,7 @@ export default {
                 <h1 class="cell auto center" style="font-family:fantasy">New Incident Form</h1>
             </div>
             <br/>
-                <form>
+                <form ref = "form" @submit.prevent="submitForm">
                     <label for="case_number">Case Number:</label><br>
                     <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
                     <label for="date">Date:</label><br>
