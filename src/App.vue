@@ -182,11 +182,6 @@ export default {
                 console.log(req.url);
                 $.ajax(req);
 
-                this.getJSON('/incidents?id=2,4').then((response) => {
-                    console.log(response);
-                }).catch((err) => {
-                    console.log(err);
-                });
             }
             else {
                 this.search_results = [];
@@ -210,9 +205,43 @@ export default {
                 //this.leaflet.map.setView([latitude, longitude], 24);
             }
 
-            console.log(this.search_results);
+            this.updateIncidents();
             
             //console.log(longitude);
+        },
+        updateIncidents(){
+            let ne = this.leaflet.map.getBounds()._northEast;
+            let sw = this.leaflet.map.getBounds()._southWest;
+
+            console.log(ne);
+            console.log(sw);
+            
+            let neighborhoods = "";
+            let i;
+            for(i=0; i<this.leaflet.neighborhood_markers.length; i++){
+                console.log(this.leaflet.neighborhood_markers[i].location);
+                if(this.leaflet.neighborhood_markers[i].location[0] <= ne.lat && this.leaflet.neighborhood_markers[i].location[0] >= sw.lat && 
+                this.leaflet.neighborhood_markers[i].location[1] <= ne.lng && this.leaflet.neighborhood_markers[i].location[1] >= sw.lng){
+                //if(this.leaflet.map.contains(this.leaflet.neighborhood_markers[i].location)){
+                    console.log("Inside");
+                    if(neighborhoods === ""){
+                        neighborhoods = (i+1).toString();
+                    } else {
+                        neighborhoods += ","+(i+1).toString();
+                    }
+
+                }
+            }
+            console.log("neighborhoods: " + neighborhoods);
+            let url = 'http://localhost:8000/incidents?limit=1000&neighborhood_number='+neighborhoods;
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+
+
         },
         updateNeighbors(){
             //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
@@ -256,7 +285,7 @@ export default {
 
         var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
 
-        this.getJSON('http://localhost:8000/incidents?neighborhood_number=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17&limit=100')
+        this.getJSON('http://localhost:8000/incidents?neighborhood_number=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17&limit=1000')
         .then((response) => {
             //incidents which are on map
             console.log(response);
