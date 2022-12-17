@@ -97,6 +97,7 @@ export default {
     components: {
         SearchResult
     },
+
     methods: {
         viewMap(event) {
             this.view = 'map';
@@ -118,16 +119,35 @@ export default {
                 neighborhood_number: this.neighborhood_number,
                 block: this.block,
             };
-            console.log(this.case_number);
-            axios.put("/new-incident", formData).then((response) => {
-                if (response.status === 200){
+            axios.put("http://localhost:8000/new-incident", formData).then((response) => {
+                if (response.status >= 200 && response.status < 300){
                     //Success!
                     console.log("Success");
                 }else{
                     //Error
-                    console.log("Error submitting new request.");
+                    console.log("Error submitting request.");
                 }
             })
+            .catch((error) => {
+                console.log(error);
+            })
+            this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
+        },
+
+        deleteForm(){
+            var value = document.getElementById("delete").value;
+            console.log(value);
+
+            let url = 'http://localhost:8000/remove-incident?case_number='+value;
+
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                //this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+
+
         },
    /*    const formData = {
                 case_number: this.case_number,
@@ -204,7 +224,6 @@ export default {
                 }
                 console.log(req.url);
                 $.ajax(req);
-
             }
             else {
                 this.search_results = [];
@@ -296,6 +315,10 @@ export default {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
+
+
+            
+
         }).catch((err)=> {
             console.log(err);
         });
@@ -343,23 +366,38 @@ export default {
             <br/>
                 <form>
                     <label for="case_number">Case Number:</label><br>
-                    <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
+                    <input type="text" placeholder="Ex: 123456" id="case_number" name="case_number" required>
                     <label for="date">Date:</label><br>
-                    <input type="text" placeholder="Type here" id="date" name="date" required>
+                    <input type="text" placeholder="Ex: 2019-04-26" id="date" name="date" required>
                     <label for="time">Time:</label><br>
-                    <input type="text" placeholder="Type here" id="time" name="time" required>
+                    <input type="text" placeholder="Ex: 19:15:00" id="time" name="time" required>
                     <label for="code">Code:</label><br>
-                    <input type="text" placeholder="Type here" id="code" name="code" required>
+                    <input type="text" placeholder="Ex: 600" id="code" name="code" required>
                     <label for="incident">Incident:</label><br>
-                    <input type="text" placeholder="Type here" id="incident" name="incident" required>
+                    <input type="text" placeholder="Ex: theft" id="incident" name="incident" required>
                     <label for="police_grid">Police Grid:</label><br>
-                    <input type="text" placeholder="Type here" id="police_grid" name="police_grid" required>
+                    <input type="text" placeholder="Ex: 49" id="police_grid" name="police_grid" required>
                     <label for="neighborhood_number">Neighborhood Number:</label><br>
-                    <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
+                    <input type="text" placeholder="Ex: 1" id="neighborhood_number" name="neighborhood_number" required>
                     <label for="block">Block:</label><br>
-                    <input type="text" placeholder="Type here" id="block" name="block" required>
+                    <input type="text" placeholder="Ex: 212OLDHUDSONRD" id="block" name="block" required>
                     <button type="button" v-on:click="submitForm()">Submit</button>
                 </form>
+
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center" style="font-family:fantasy">Delete Incident Form</h1>
+            </div>
+            <br/>
+
+            <label for="date">Incident Number:</label><br>
+
+            <form>
+                <input type="text" placeholder="Type here" id="delete" name="delete" required>
+                <button type="button" v-on:click="deleteForm()">Submit</button>
+            </form>
+            <br/>
+            <br/>
+
         </div>
     </div>
     <div v-if="view === 'about'">
