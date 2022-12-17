@@ -3,7 +3,21 @@ import { isTemplateNode } from '@vue/compiler-core';
 import SearchResult from './components/SearchResult.vue'
 import $ from 'jquery'
 import axios from "axios";
+            /*let case_number = document.getElementById("case_number").value;
+            let date = document.getElementById("date").value;
+            let time = document.getElementById("time").value;
+            let code = document.getElementById("code").value;
+            let incident = document.getElementById("incident").value;
+            let police_grid = document.getElementById("police_grid").value;
+            let neighborhood_number = document.getElementById("neighborhood_number").value;
+            let block = document.getElementById("block").value;
 
+            var queryString = "?case_number=" + case_number + "&date=" + date + "&time=" + time + "&code=" + code + 
+            "&incident=" + incident + "&police_grid=" + police_grid + "&neighborhood_number=" + neighborhood_number + "&block=" + block;
+            
+            document.forms[0].action = "submit.php" + queryString;
+            document.forms[0].submit();
+            alert("New incident submitted!");*/
 export default {
     data() {
         return {
@@ -71,6 +85,7 @@ export default {
         },
 
         submitForm(){
+            alert("Success!")
             const formData = {
                 case_number: this.case_number,
                 date: this.name,
@@ -95,6 +110,42 @@ export default {
             })
             this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
         },
+
+        deleteForm(){
+            var value = document.getElementById("delete").value;
+            console.log(value);
+
+            let url = 'http://localhost:8000/remove-incident?case_number='+value;
+
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                //this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+
+
+        },
+   /*    const formData = {
+                case_number: this.case_number,
+                date: this.name,
+                time: this.time,
+                code: this.code,
+                incident: this.incident,
+                police_grid: this.police_grid,
+                neighborhood_number: this.neighborhood_number,
+                block: this.block,
+            };
+            console.log(this.case_number);
+            axios.put("/new-incident", formData).then((response) => {
+                if (response.status === 200){
+                    //Success!
+                    alert("Success!")
+                }else{
+                    //Error
+                    alert("Error submitting new request.")
+                }
+            })*/
 
         viewAbout(event) {
             this.view = 'about';
@@ -258,6 +309,10 @@ export default {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
+
+
+            
+
         }).catch((err)=> {
             console.log(err);
         });
@@ -300,7 +355,7 @@ export default {
                 <h1 class="cell auto center" style="font-family:fantasy">New Incident Form</h1>
             </div>
             <br/>
-                <form ref = "form" @submit.prevent="submitForm">
+                <form>
                     <label for="case_number">Case Number:</label><br>
                     <input type="text" placeholder="Ex: 123456" id="case_number" name="case_number" required>
                     <label for="date">Date:</label><br>
@@ -319,6 +374,21 @@ export default {
                     <input type="text" placeholder="Ex: 212OLDHUDSONRD" id="block" name="block" required>
                     <button type="button" v-on:click="submitForm()">Submit</button>
                 </form>
+
+            <div class="grid-x grid-padding-x">
+                <h1 class="cell auto center" style="font-family:fantasy">Delete Incident Form</h1>
+            </div>
+            <br/>
+
+            <label for="date">Incident Number:</label><br>
+
+            <form>
+                <input type="text" placeholder="Type here" id="delete" name="delete" required>
+                <button type="button" v-on:click="deleteForm()">Submit</button>
+            </form>
+            <br/>
+            <br/>
+
         </div>
     </div>
     <div v-if="view === 'about'">
