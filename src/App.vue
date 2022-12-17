@@ -466,7 +466,7 @@ export default {
                     <h1>Goals After College:</h1>
                     <p>Once I graduate (in just a few days here) I'll soon start a job as an full stack associate software developer in the Twin Cities!
                         I've wanted to work as a full stack software developer for a while now, so I'm excitied to be able to have this opportunity.
-                        I'm thinking I'd like to live abroad for a few years but I have yet to decide when and where but I expect that is on the horizon for me.
+                        I'm thinking I'd like to live abroad for a few years but I have yet to decide when and where but I expect that to be on the horizon for me.
                     </p>
                 </div>
             </div>
