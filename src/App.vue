@@ -60,6 +60,7 @@ export default {
     components: {
         SearchResult
     },
+
     methods: {
         viewMap(event) {
             this.view = 'map';
@@ -80,19 +81,19 @@ export default {
                 neighborhood_number: this.neighborhood_number,
                 block: this.block,
             };
-            axios.put("/new-incident", formData).then((response) => {
+            axios.put("http://localhost:8000/new-incident", formData).then((response) => {
                 if (response.status >= 200 && response.status < 300){
                     //Success!
                     console.log("Success");
                 }else{
                     //Error
-                    console.log("Error submitting new request.");
+                    console.log("Error submitting request.");
                 }
             })
             .catch((error) => {
                 console.log(error);
             })
-            this.$refs.form.reset(); //deletes all items inputted into the form on the webpage
+            this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
         },
 
         viewAbout(event) {
@@ -149,7 +150,6 @@ export default {
                 }
                 console.log(req.url);
                 $.ajax(req);
-
             }
             else {
                 this.search_results = [];
@@ -302,21 +302,21 @@ export default {
             <br/>
                 <form ref = "form" @submit.prevent="submitForm">
                     <label for="case_number">Case Number:</label><br>
-                    <input type="text" placeholder="Type here" id="case_number" name="case_number" required>
+                    <input type="text" placeholder="Ex: 123456" id="case_number" name="case_number" required>
                     <label for="date">Date:</label><br>
-                    <input type="text" placeholder="Type here" id="date" name="date" required>
+                    <input type="text" placeholder="Ex: 2019-04-26" id="date" name="date" required>
                     <label for="time">Time:</label><br>
-                    <input type="text" placeholder="Type here" id="time" name="time" required>
+                    <input type="text" placeholder="Ex: 19:15:00" id="time" name="time" required>
                     <label for="code">Code:</label><br>
-                    <input type="text" placeholder="Type here" id="code" name="code" required>
+                    <input type="text" placeholder="Ex: 600" id="code" name="code" required>
                     <label for="incident">Incident:</label><br>
-                    <input type="text" placeholder="Type here" id="incident" name="incident" required>
+                    <input type="text" placeholder="Ex: theft" id="incident" name="incident" required>
                     <label for="police_grid">Police Grid:</label><br>
-                    <input type="text" placeholder="Type here" id="police_grid" name="police_grid" required>
+                    <input type="text" placeholder="Ex: 49" id="police_grid" name="police_grid" required>
                     <label for="neighborhood_number">Neighborhood Number:</label><br>
-                    <input type="text" placeholder="Type here" id="neighborhood_number" name="neighborhood_number" required>
+                    <input type="text" placeholder="Ex: 1" id="neighborhood_number" name="neighborhood_number" required>
                     <label for="block">Block:</label><br>
-                    <input type="text" placeholder="Type here" id="block" name="block" required>
+                    <input type="text" placeholder="Ex: 212OLDHUDSONRD" id="block" name="block" required>
                     <button type="button" v-on:click="submitForm()">Submit</button>
                 </form>
         </div>
