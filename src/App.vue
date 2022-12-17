@@ -113,6 +113,13 @@ export default {
 
             let url = 'http://localhost:8000/remove-incident?case_number='+value;
 
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                //this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+
 
         },
    /*    const formData = {
