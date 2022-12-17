@@ -25,7 +25,6 @@ export default {
             auth_data: {},
             address_search: '',
             codes: [],
-            neighborhoods: [],
             incidents: [],
             search_results: [],
             incident_results: [],
@@ -68,7 +67,31 @@ export default {
                     {location: [44.937705, -93.136997], marker: null},
                     {location: [44.949203, -93.093739], marker: null}
                 ]
-            }
+                
+            },
+            // neighborhoods: [
+            //     {1:  this.leaflet.neighborhood_markers[0]}// <= bounds.nw.lat && neighborhood_markers[0].location[0] >= bounds.sw.lat && this.leaflet.neighborhood_markers[0].location[1] <= bounds.nw.lng && this.leaflet.neighborhood_markers[0].location[1] >= bounds.se.lng }
+            // ]
+            neighborhoods: //[]
+            [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+                // {0: 1},
+                // {1: 2},
+                // {2: 3},
+                // {3: 4},
+                // {4: 5},
+                // {5: 6},
+                // {6: 7},
+                // {7: 8},
+                // {8: 9},
+                // {9: 10},
+                // {10: 11},
+                // {11: 12},
+                // {12: 13},
+                // {13: 14},
+                // {14: 15},
+                // {15: 16},
+                // {16: 17}
+            
         };
     },
     components: {
@@ -187,7 +210,24 @@ export default {
                 this.search_results = [];
             }
         },
+        updateIncidents(){
+            let ne = this.leaflet.map.getBounds()._northEast;
+            let sw = this.leaflet.map.getBounds()._southWest;
+            
+            let neighborhood_list = [];
+            let i;
+            for(i=0; i<this.leaflet.neighborhood_markers.length; i++){
+                if(this.leaflet.neighborhood_markers[i].location[0] <= ne.lat && this.leaflet.neighborhood_markers[i].location[0] >= sw.lat && 
+                this.leaflet.neighborhood_markers[i].location[1] <= ne.lng && this.leaflet.neighborhood_markers[i].location[1] >= sw.lng){
+                    neighborhood_list.push((i+1).toString());
 
+                }
+            }
+            this.neighborhoods = neighborhood_list;
+
+
+
+        },
         addressData(data) {
             this.search_results = data;
 
@@ -200,48 +240,13 @@ export default {
                 
                 var myMarker = L.marker([latitude, longitude], {title:'Hover Text',alt:"Marker",clickable:false,draggable:false}).addTo(this.leaflet.map)
                 .bindPopup(data[0].display_name);
-                
+
                 this.leaflet.map.flyTo([latitude, longitude], 15);
-                //this.leaflet.map.setView([latitude, longitude], 24);
+                //this.updateIncidents();
+                
             }
 
-            this.updateIncidents();
-            
             //console.log(longitude);
-        },
-        updateIncidents(){
-            let ne = this.leaflet.map.getBounds()._northEast;
-            let sw = this.leaflet.map.getBounds()._southWest;
-
-            console.log(ne);
-            console.log(sw);
-            
-            let neighborhoods = "";
-            let i;
-            for(i=0; i<this.leaflet.neighborhood_markers.length; i++){
-                console.log(this.leaflet.neighborhood_markers[i].location);
-                if(this.leaflet.neighborhood_markers[i].location[0] <= ne.lat && this.leaflet.neighborhood_markers[i].location[0] >= sw.lat && 
-                this.leaflet.neighborhood_markers[i].location[1] <= ne.lng && this.leaflet.neighborhood_markers[i].location[1] >= sw.lng){
-                //if(this.leaflet.map.contains(this.leaflet.neighborhood_markers[i].location)){
-                    console.log("Inside");
-                    if(neighborhoods === ""){
-                        neighborhoods = (i+1).toString();
-                    } else {
-                        neighborhoods += ","+(i+1).toString();
-                    }
-
-                }
-            }
-            console.log("neighborhoods: " + neighborhoods);
-            let url = 'http://localhost:8000/incidents?limit=1000&neighborhood_number='+neighborhoods;
-            this.getJSON(url).then((response) => {
-                console.log(response);
-                this.incident_results = response;
-            }).catch((err) => {
-                console.log(err);
-            });
-
-
         },
         updateNeighbors(){
             //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
@@ -255,6 +260,7 @@ export default {
         
     },
     mounted() {
+        console.log("neighborhood calcs" + this.neighborhoods);
         this.leaflet.map = L.map('leafletmap').setView([this.leaflet.center.lat, this.leaflet.center.lng], this.leaflet.zoom);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -285,7 +291,7 @@ export default {
 
         var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
 
-        this.getJSON('http://localhost:8000/incidents?neighborhood_number=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17&limit=1000')
+        this.getJSON('http://localhost:8000/incidents?neighborhood_number=' + this.neighborhoods + '&limit=1000')
         .then((response) => {
             //incidents which are on map
             console.log(response);
@@ -293,6 +299,8 @@ export default {
         }).catch((err)=> {
             console.log(err);
         });
+
+        this.leaflet.map.on('moveend', this.updateIncidents);
 
     }
 }
@@ -322,7 +330,8 @@ export default {
                 <div id="leafletmap" class="cell auto"></div>
             </div>
 
-            <SearchResult :result_array="incident_results" />
+            <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" />
+            <!-- <SearchResult :result_array="incident_results"/> -->
         </div>
     </div>
     <div v-if="view === 'new_incident'">
@@ -417,9 +426,9 @@ export default {
                     <h1>Studies:</h1>
                     <p>I am majoring in Computer Science, while double minoring in both Data Analytics and Applied Statistics.</p>
                     <h1>Goals After College:</h1>
-                    <p>Once I graduate (in just a few days here) I'll soon start a job as an associate software developer
-                        My main goal as of now is to graduate with a Bachelor's in Computer Science! I am currently undecided in what I want
-                        to pursue as far as a career in the computer science field. However, game development would be a dream job of mine.
+                    <p>Once I graduate (in just a few days here) I'll soon start a job as an full stack associate software developer in the Twin Cities!
+                        I've wanted to work as a full stack software developer for a while now, so I'm excitied to be able to have this opportunity.
+                        I'm thinking I'd like to live abroad for a few years but I have yet to decide when and where but I expect that is on the horizon for me.
                     </p>
                 </div>
             </div>

@@ -1,11 +1,25 @@
 <script>
 export default {
     props: {
-        result_array: Array
+        result_array: Array,
+        neighborhoods: Array
     },
     watch: {
         result_array() {
             console.log(this.result_array);
+        },
+        neighborhoods() {
+            console.log(this.neighborhoods);
+        }
+    }, methods: {
+        contain(number) {
+            let i;
+            for(i=0; i<this.neighborhoods.length; i++){
+                if(number == this.neighborhoods[i]){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
@@ -17,23 +31,23 @@ export default {
             <tr>
                 <th>Case Number</th>
                 <th>Date and Time</th>
-                <th>Code</th>
                 <th>Incident</th>
                 <th>Police Grid</th>
                 <th>Neighborhood Number</th>
                 <th>Block</th>
             </tr>
         </thead>
-        <tbody>
-            <tr v-for="(item, index) in result_array" :class="(index % 2 === 0) ? 'even' : 'odd'">
-                <td>{{ item.case_number }}</td>
-                <td>{{ item.date }}  {{ item.time }} </td>
-                <td>{{ item.code }}</td>
-                <td>{{ item.incident }}</td>
-                <td>{{ item.police_grid }}</td>
-                <td>{{ item.neighborhood_number }}</td>
-                <td>{{ item.block }}</td>
-            </tr>
+        <tbody v-for="(item, index) in result_array">
+                      
+                <tr v-if="this.contain(item.neighborhood_number)" ss="(index % 2 === 0) ? 'even' : 'odd'">
+                    <td>{{ item.case_number }}</td>
+                    <td>{{ item.date }}  {{ item.time }} </td>
+                    <td>{{ item.incident }} (code: {{ item.code }})</td>
+                    <td>{{ item.police_grid }}</td>
+                    <td>{{ item.neighborhood_number }}</td>
+                    <td>{{ item.block }}</td>
+                </tr>
+            
         </tbody>
     </table>
 </template>
