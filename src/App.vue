@@ -290,6 +290,10 @@ export default {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
+
+
+            
+
         }).catch((err)=> {
             console.log(err);
         });
