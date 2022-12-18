@@ -26,48 +26,14 @@ export default {
     methods: {
         contain(number) {
             let i;
-            //this.name = this.neighborhood_names[number-1];
+            this.name = this.neighborhood_names[number-1];
             for(i=0; i<this.neighborhoods.length; i++){
                 if(number == this.neighborhoods[i]){
                     return true;
                 }
             }
             return false;
-        }
-    },
-
-    methods: {
-        getColor(code) {
-            //console.log("code = " + code);
-            code = parseInt(code);
-            //console.log("code = " + code);
-            if(code >= 100 && code < 200) {
-                return "Homicide";
-            }
-            else if((code >= 200 && code < 300) || (code >= 400 && code < 500) || (code >= 800 && code < 900)) {
-                return "Assault";
-            }
-            else if((code >= 300 && code < 400) || (code >= 500 && code < 800)) {
-                return "Theft";
-            }
-            else if(code >= 900 && code < 1500) {
-                return "PropertyDamage";
-            }
-            else if(code >= 1800 && code < 1900) {
-                return "Narcotics";
-            }
-            else if(code == 2619) {
-                return "Weapons";
-            }
-            else {
-                return "else";
-            }
-
-        }
-    },
-
-    methods: {
-        getColor(code) {
+        }, getColor(code) {
             //console.log("code = " + code);
             code = parseInt(code);
             //console.log("code = " + code);
@@ -113,7 +79,7 @@ export default {
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
-                <tr v-if="this.contain(item.neighborhood_number)" ss="getColor(item.code)">
+                <tr v-if="this.contain(item.neighborhood_number)" class="this.getColor(item.code)">
                     <td>{{ item.case_number }}</td>
                     <td>{{ item.date }}  {{ item.time }} </td>
                     <td>{{ item.incident }} (code: {{ item.code }})</td>
