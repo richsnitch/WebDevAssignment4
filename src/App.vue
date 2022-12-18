@@ -20,6 +20,7 @@ export default {
             code: "",
             incident: "",
             neighborhood_number: "",
+            neighborhoods: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
             police_grid: "",
             block: "",
             leaflet: {
@@ -203,7 +204,7 @@ export default {
             console.log("Neighborhoods: " + this.neighborhoods);
 
             //Also update markers if needed
-            this.updateNeighbors();
+            //this.updateNeighbors();
 
         },
         addressData(data) {
@@ -294,7 +295,7 @@ export default {
             console.log(err);
         });
 
-        this.getJSON('http://localhost:8000/neighborhoods')
+        /*this.getJSON('http://localhost:8000/neighborhoods')
         .then((response) => {
             console.log(response);
             let i;
@@ -305,7 +306,7 @@ export default {
 
         }).catch((err) => {
             console.log(err);
-        })
+        })*/
 
         this.leaflet.map.on('moveend', this.updateIncidents);
 

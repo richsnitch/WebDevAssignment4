@@ -25,7 +25,7 @@ export default {
     methods: {
         contain(number) {
             let i;
-            this.name = this.neighborhood_names[number-1];
+            //this.name = this.neighborhood_names[number-1];
             for(i=0; i<this.neighborhoods.length; i++){
                 if(number == this.neighborhoods[i]){
                     return true;
