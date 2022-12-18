@@ -1,7 +1,12 @@
 <script>
 import { isTemplateNode } from '@vue/compiler-core';
-import SearchResult from './components/SearchResult.vue'
-import $ from 'jquery'
+import SearchResult from './components/SearchResult.vue';
+//import DatePick from "vue-date-pick";
+//import Datepicker from 'vuejs-datepicker';
+//import Datepicker from "vuepic/vue-datepicker";
+//import '@vuepic/vue-datepicker/dist/main.css'
+//import 'vue-date-pick/dist/vueDatePick.scss';
+import $ from 'jquery';
 import axios from "axios";
 
 export default {
@@ -54,11 +59,27 @@ export default {
                     {location: [44.937705, -93.136997], marker: null},
                     {location: [44.949203, -93.093739], marker: null}
                 ]
-            }
+            },
+            input_placeholder: "Enter a location here",
+
+            filtersT: [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ],
+            checked_filtersT: [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ],
+            checked_allT: true,
+
+            filtersN: [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ],
+            checked_filtersN: [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ],
+            checked_allN: true,
+
+            start_date: "2014-01-01",
+            end_date: "2022-01-01",
+
+            limit: "1000"
         };
     },
     components: {
-        SearchResult
+        "SearchResult": SearchResult, 
+        //"datepicker": Datepicker
+        //"date-pick" : DatePick
     },
     methods: {
         viewMap(event) {
@@ -67,6 +88,24 @@ export default {
 
         viewNewIncident(event) {
             this.view = 'new_incident'; 
+        },
+        check_allT() {
+            if(this.checked_allT == false) {
+                this.checked_filtersT = [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ];
+            }
+            else {
+                this.checked_filtersT = [];
+            }
+            
+        },
+        check_allN() {
+            if(this.checked_allN == false) {
+                this.checked_filtersN = [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ];
+            }
+            else {
+                this.checked_filtersN = [];
+            }
+            
         },
 
         submitForm(){
@@ -201,7 +240,7 @@ export default {
                 }
             }
             console.log("neighborhoods: " + neighborhoods);
-            let url = 'http://localhost:8000/incidents?limit=1000&neighborhood_number='+neighborhoods;
+            let url = 'http://localhost:8000/incidents?limit=' + this.limit + '&neighborhood_number='+neighborhoods + this.getFilterForSQL()+ "&start_date=" + this.start_date + "&end_date=" + this.end_date;
             this.getJSON(url).then((response) => {
                 console.log(response);
                 this.incident_results = response;
@@ -210,6 +249,36 @@ export default {
             });
 
 
+        },
+        updateForFilters() {
+            let url = 'http://localhost:8000/incidents?limit=' + this.limit + this.getNumberForSQL() +  this.getFilterForSQL() + "&start_date=" + this.start_date + "&end_date=" + this.end_date;
+            console.log(url);
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        getFilterForSQL() {
+            let string = "&filter=";
+            let i = 0;
+            for(i = 0;i < this.checked_filtersT.length; i++) {
+                string = string + this.checked_filtersT[i] + ",";
+            }
+            string = string.substring(0, string.length - 1);
+            console.log(string);
+            return string;
+        },
+        getNumberForSQL() {
+            let string = "&neighborhood_number=";
+            if(this.checked_filtersN.length == 0) { return string; }
+            let i = 0;
+            for(i = 0;i < this.checked_filtersN.length; i++) {
+                string = string + this.checked_filtersN[i] + ",";
+            }
+            string = string.substring(0, string.length - 1);
+            return string;
         },
         updateNeighbors(){
             //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
@@ -288,6 +357,34 @@ export default {
 
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
+                
+            </div>
+            <div  id="filtersT" class="cell auto">
+                <span>Crime Types: </span>
+                <span v-for="filter in filtersT"> 
+                    <input type="checkbox" v-bind:id="filter" v-bind:value="filter" v-model="checked_filtersT"/> 
+                    <label>{{filter}}</label>
+                </span>
+                <span><input type ="checkbox" @click='check_allT()' v-bind:value="checked_allT" v-model="checked_allT"/><label>Check All</label></span>
+            </div>
+            <div  id="filtersN" class="cell auto">
+                <span>Neighborhood Numbers: </span>
+                <span v-for="filter in filtersN"> 
+                    <input type="checkbox" v-bind:id="filter" v-bind:value="filter" v-model="checked_filtersN"/> 
+                    <label>{{filter}}</label>
+                </span>
+                <span><input type ="checkbox" @click='check_allN()' v-bind:value="checked_allN" v-model="checked_allN"/><label>Check All</label></span>
+            </div>
+            <div>
+                <span><label>Please enter a start date </label>
+                <input type="text" v-model="start_date"></span>
+                <span><label>Please enter an end date </label>
+                <input type="text" v-model="end_date"></span>
+            </div>
+            <div>
+                <label>Please enter an upper limit for the number of results: </label>
+                <input type="text" v-model="limit">
+                <button class="blue" type="button" @click="updateForFilters()">Search with filters</button>
             </div>
 
             <SearchResult :result_array="incident_results" />
@@ -367,10 +464,15 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="../images/picofaudrey.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Audrey Jenkins</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am majoring in computer science and minoring in sustainability and statistics</p>
+                    <h1>Goals After College:</h1>
+                    <p>Once I graduate in the spring, I hope to look for work as a software engineer. I do not have a specific field of work in mind, but game design is interesting to me</p>
 
                 </div>
             </div>
