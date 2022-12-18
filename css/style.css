@@ -24,6 +24,18 @@ button {
     border-radius: 5px;
 }
 
+.red {
+    border-color: #f32121;
+    color: #f32121;
+    border-radius: 5px;
+}
+
+.green {
+    border-color: #21f336;
+    color: #21f336;
+    border-radius: 5px;
+}
+
 .center {
     align-items: center;
     text-align: center;

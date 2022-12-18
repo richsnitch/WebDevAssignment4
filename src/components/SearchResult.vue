@@ -1,4 +1,5 @@
 <script>
+
 export default {
     data() {
         return {
@@ -20,7 +21,8 @@ export default {
         neighborhood_names() {
             console.log(this.neighborhood_names);
         }
-    }, methods: {
+    },
+    methods: {
         contain(number) {
             let i;
             this.name = this.neighborhood_names[number-1];
@@ -45,6 +47,8 @@ export default {
                 <th>Police Grid</th>
                 <th>Neighborhood Number</th>
                 <th>Block</th>
+                <th>Look-Up</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
@@ -56,6 +60,10 @@ export default {
                     <td>{{ this.name }}</td>
                     <!-- <td>{{ this.neighborhood_names.helper_index }}</td> -->
                     <td>{{ item.block }}</td>
+                    <td><button class="green" type="button" @click="addressSearch">Search</button>
+                        <App :address_search2="item.block" /></td>
+
+                    <td><button class="red" type="button" @click="addressSearch">Delete</button></td>
                 </tr>
             
         </tbody>
