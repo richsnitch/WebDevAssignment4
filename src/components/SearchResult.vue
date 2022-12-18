@@ -1,5 +1,6 @@
 <script>
 
+
 export default {
     data() {
         return {
@@ -33,6 +34,66 @@ export default {
             }
             return false;
         }
+    },
+
+    methods: {
+        getColor(code) {
+            //console.log("code = " + code);
+            code = parseInt(code);
+            //console.log("code = " + code);
+            if(code >= 100 && code < 200) {
+                return "Homicide";
+            }
+            else if((code >= 200 && code < 300) || (code >= 400 && code < 500) || (code >= 800 && code < 900)) {
+                return "Assault";
+            }
+            else if((code >= 300 && code < 400) || (code >= 500 && code < 800)) {
+                return "Theft";
+            }
+            else if(code >= 900 && code < 1500) {
+                return "PropertyDamage";
+            }
+            else if(code >= 1800 && code < 1900) {
+                return "Narcotics";
+            }
+            else if(code == 2619) {
+                return "Weapons";
+            }
+            else {
+                return "else";
+            }
+
+        }
+    },
+
+    methods: {
+        getColor(code) {
+            //console.log("code = " + code);
+            code = parseInt(code);
+            //console.log("code = " + code);
+            if(code >= 100 && code < 200) {
+                return "Homicide";
+            }
+            else if((code >= 200 && code < 300) || (code >= 400 && code < 500) || (code >= 800 && code < 900)) {
+                return "Assault";
+            }
+            else if((code >= 300 && code < 400) || (code >= 500 && code < 800)) {
+                return "Theft";
+            }
+            else if(code >= 900 && code < 1500) {
+                return "PropertyDamage";
+            }
+            else if(code >= 1800 && code < 1900) {
+                return "Narcotics";
+            }
+            else if(code == 2619) {
+                return "Weapons";
+            }
+            else {
+                return "else";
+            }
+
+        }
     }
 }
 </script>
@@ -52,7 +113,7 @@ export default {
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
-                <tr v-if="this.contain(item.neighborhood_number)" ss="(index % 2 === 0) ? 'even' : 'odd'">
+                <tr v-if="this.contain(item.neighborhood_number)" ss="getColor(item.code)">
                     <td>{{ item.case_number }}</td>
                     <td>{{ item.date }}  {{ item.time }} </td>
                     <td>{{ item.incident }} (code: {{ item.code }})</td>
@@ -86,5 +147,41 @@ th, td {
 }
 .no_img {
     height: 80px;
+}
+
+.else {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(241, 241, 241);
+}
+.Homicide {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(156, 106, 106);
+}
+.Assault {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(105, 111, 161);
+}
+.Theft {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(113, 172, 106);
+}
+.PropertyDamage {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(231, 219, 112);
+}
+.Narcotics {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(146, 110, 167);
+}
+.Weapons {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(189, 150, 78);
 }
 </style>
