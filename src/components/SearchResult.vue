@@ -1,4 +1,6 @@
 <script>
+import App from '../App.vue';
+
 export default {
     props: {
         result_array: Array,
@@ -11,11 +13,12 @@ export default {
         neighborhoods() {
             console.log(this.neighborhoods);
         }
-    }, methods: {
+    },
+    methods: {
         contain(number) {
             let i;
-            for(i=0; i<this.neighborhoods.length; i++){
-                if(number == this.neighborhoods[i]){
+            for (i = 0; i < this.neighborhoods.length; i++) {
+                if (number == this.neighborhoods[i]) {
                     return true;
                 }
             }
@@ -35,6 +38,8 @@ export default {
                 <th>Police Grid</th>
                 <th>Neighborhood Number</th>
                 <th>Block</th>
+                <th>Look-Up</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
@@ -46,6 +51,10 @@ export default {
                     <td>{{ item.police_grid }}</td>
                     <td>{{ item.neighborhood_number }}</td>
                     <td>{{ item.block }}</td>
+                    <td><button class="green" type="button" @click="addressSearch">Search</button>
+                        <App :address_search2="item.block" /></td>
+
+                    <td><button class="red" type="button" @click="addressSearch">Delete</button></td>
                 </tr>
             
         </tbody>

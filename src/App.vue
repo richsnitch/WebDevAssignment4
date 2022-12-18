@@ -95,6 +95,9 @@ export default {
             
         };
     },
+    props: {
+        address_search2: String
+    },
     components: {
         SearchResult
     },
