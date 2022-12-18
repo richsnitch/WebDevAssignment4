@@ -1,8 +1,14 @@
 <script>
 export default {
+    data() {
+        return {
+            name: ""
+        }
+    },
     props: {
         result_array: Array,
-        neighborhoods: Array
+        neighborhoods: Array,
+        neighborhood_names: Array
     },
     watch: {
         result_array() {
@@ -10,10 +16,14 @@ export default {
         },
         neighborhoods() {
             console.log(this.neighborhoods);
+        },
+        neighborhood_names() {
+            console.log(this.neighborhood_names);
         }
     }, methods: {
         contain(number) {
             let i;
+            this.name = this.neighborhood_names[number-1];
             for(i=0; i<this.neighborhoods.length; i++){
                 if(number == this.neighborhoods[i]){
                     return true;
@@ -38,13 +48,13 @@ export default {
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
-                      
                 <tr v-if="this.contain(item.neighborhood_number)" ss="(index % 2 === 0) ? 'even' : 'odd'">
                     <td>{{ item.case_number }}</td>
                     <td>{{ item.date }}  {{ item.time }} </td>
                     <td>{{ item.incident }} (code: {{ item.code }})</td>
                     <td>{{ item.police_grid }}</td>
-                    <td>{{ item.neighborhood_number }}</td>
+                    <td>{{ this.name }}</td>
+                    <!-- <td>{{ this.neighborhood_names.helper_index }}</td> -->
                     <td>{{ item.block }}</td>
                 </tr>
             

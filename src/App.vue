@@ -35,6 +35,8 @@ export default {
             incident: "",
             police_grid: "",
             neighborhood_number: "",
+            neighborhood_names: [],
+            neighborhoods: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
             block: "",
             leaflet: {
                 map: null,
@@ -68,30 +70,7 @@ export default {
                     {location: [44.949203, -93.093739], marker: null}
                 ]
                 
-            },
-            // neighborhoods: [
-            //     {1:  this.leaflet.neighborhood_markers[0]}// <= bounds.nw.lat && neighborhood_markers[0].location[0] >= bounds.sw.lat && this.leaflet.neighborhood_markers[0].location[1] <= bounds.nw.lng && this.leaflet.neighborhood_markers[0].location[1] >= bounds.se.lng }
-            // ]
-            neighborhoods: //[]
-            [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-                // {0: 1},
-                // {1: 2},
-                // {2: 3},
-                // {3: 4},
-                // {4: 5},
-                // {5: 6},
-                // {6: 7},
-                // {7: 8},
-                // {8: 9},
-                // {9: 10},
-                // {10: 11},
-                // {11: 12},
-                // {12: 13},
-                // {13: 14},
-                // {14: 15},
-                // {15: 16},
-                // {16: 17}
-            
+            }
         };
     },
     components: {
@@ -142,7 +121,6 @@ export default {
 
             this.getJSON(url).then((response) => {
                 console.log(response);
-                //this.incident_results = response;
             }).catch((err) => {
                 console.log(err);
             });
@@ -302,8 +280,6 @@ export default {
             /*for(i=0; i<this.neighborhood_markers.length; i++){
                 var newMarker = L.marker(this.neighborhood_markers[i]).addTo(this.leaflet.map);
             }*/
-
-
         }).catch((error) => {
             console.log('Error:', error);
         });
@@ -315,13 +291,22 @@ export default {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
-
-
-            
-
         }).catch((err)=> {
             console.log(err);
         });
+
+        this.getJSON('http://localhost:8000/neighborhoods')
+        .then((response) => {
+            console.log(response);
+            let i;
+            for(i=0; i<response.length; i++){
+                this.neighborhood_names.push(response[i].neighborhood_name);
+            }
+            console.log(this.neighborhood_names);
+
+        }).catch((err) => {
+            console.log(err);
+        })
 
         this.leaflet.map.on('moveend', this.updateIncidents);
 
@@ -353,8 +338,7 @@ export default {
                 <div id="leafletmap" class="cell auto"></div>
             </div>
 
-            <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" />
-            <!-- <SearchResult :result_array="incident_results"/> -->
+            <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" :neighborhood_names="neighborhood_names" />
         </div>
     </div>
     <div v-if="view === 'new_incident'">
