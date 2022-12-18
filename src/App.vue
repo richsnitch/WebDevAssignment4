@@ -34,8 +34,8 @@ export default {
             time: "",
             code: "",
             incident: "",
-            police_grid: "",
             neighborhood_number: "",
+            police_grid: "",
             block: "",
             leaflet: {
                 map: null,
@@ -85,27 +85,29 @@ export default {
         },
 
         submitForm(){
-            alert("Success!")
-            const formData = {
-                case_number: this.case_number,
-                date: this.name,
-                time: this.time,
-                code: this.code,
-                incident: this.incident,
-                police_grid: this.police_grid,
-                neighborhood_number: this.neighborhood_number,
-                block: this.block,
+            const formData =  {
+                case_number: form.elements.case_number.value,
+                date: form.elements.date.value,
+                time: form.elements.time.value,
+                code: form.elements.code.value,
+                incident: form.elements.incident.value,
+                police_grid: form.elements.police_grid.value,
+                neighborhood_number: form.elements.neighborhood_number.value,
+                block: form.elements.block.value,
             };
             axios.put("http://localhost:8000/new-incident", formData).then((response) => {
                 if (response.status >= 200 && response.status < 300){
                     //Success!
+                    alert("New incident submitted successfully!")
                     console.log("Success");
                 }else{
                     //Error
+                    alert("Error submitting new request. Try again.")
                     console.log("Error submitting request.");
                 }
             })
             .catch((error) => {
+                alert("Error submitting new request. Try again!")
                 console.log(error);
             })
             this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
@@ -355,7 +357,7 @@ export default {
                 <h1 class="cell auto center" style="font-family:fantasy">New Incident Form</h1>
             </div>
             <br/>
-                <form>
+                <form ref = "form" id = "form" @submit.prevent="submitForm">
                     <label for="case_number">Case Number:</label><br>
                     <input type="text" placeholder="Ex: 123456" id="case_number" name="case_number" required>
                     <label for="date">Date:</label><br>

@@ -47,10 +47,6 @@ app.get('/codes', (req, res) => {
     //Finally, set the ordering
     query = query + " Order by code";
 
-
-    
-
-
     databaseSelect(query, [])
     .then((data) =>{
         console.log(data);
@@ -181,6 +177,8 @@ app.put('/new-incident', (req, res) => {
     let time = '';
 
     for([key, value] of Object.entries(req.body)){
+        console.log(key);
+        console.log(value);
         if(key == 'case_number') {
             get = 'SELECT * FROM Incidents WHERE "case_number" = ' + value + ";";
             columns += key + ", ";
