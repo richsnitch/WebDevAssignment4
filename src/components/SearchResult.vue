@@ -45,7 +45,7 @@ export default {
                 <th>Date and Time</th>
                 <th>Incident</th>
                 <th>Police Grid</th>
-                <th>Neighborhood Number</th>
+                <th>Neighborhood Name</th>
                 <th>Block</th>
                 <th>Look-Up</th>
                 <th>Delete</th>
@@ -58,7 +58,6 @@ export default {
                     <td>{{ item.incident }} (code: {{ item.code }})</td>
                     <td>{{ item.police_grid }}</td>
                     <td>{{ this.name }}</td>
-                    <!-- <td>{{ this.neighborhood_names.helper_index }}</td> -->
                     <td>{{ item.block }}</td>
                     <td><button class="green" type="button" @click="addressSearch">Search</button>
                         <App :address_search2="item.block" /></td>
