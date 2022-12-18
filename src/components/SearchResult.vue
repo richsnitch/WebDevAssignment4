@@ -1,12 +1,68 @@
 <script>
 
+
 export default {
+    data() {
+        return {
+            name: ""
+        }
+    },
     props: {
-        result_array: Array
+        result_array: Array,
+        neighborhoods: Array,
+        neighborhood_names: Array
     },
     watch: {
         result_array() {
             console.log(this.result_array);
+        },
+        neighborhoods() {
+            console.log(this.neighborhoods);
+        },
+        neighborhood_names() {
+            console.log(this.neighborhood_names);
+        }
+    },
+    methods: {
+        contain(number) {
+            let i;
+            this.name = this.neighborhood_names[number-1];
+            for(i=0; i<this.neighborhoods.length; i++){
+                if(number == this.neighborhoods[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+    },
+
+    methods: {
+        getColor(code) {
+            //console.log("code = " + code);
+            code = parseInt(code);
+            //console.log("code = " + code);
+            if(code >= 100 && code < 200) {
+                return "Homicide";
+            }
+            else if((code >= 200 && code < 300) || (code >= 400 && code < 500) || (code >= 800 && code < 900)) {
+                return "Assault";
+            }
+            else if((code >= 300 && code < 400) || (code >= 500 && code < 800)) {
+                return "Theft";
+            }
+            else if(code >= 900 && code < 1500) {
+                return "PropertyDamage";
+            }
+            else if(code >= 1800 && code < 1900) {
+                return "Narcotics";
+            }
+            else if(code == 2619) {
+                return "Weapons";
+            }
+            else {
+                return "else";
+            }
+
         }
     },
 
@@ -48,23 +104,28 @@ export default {
             <tr>
                 <th>Case Number</th>
                 <th>Date and Time</th>
-                <th>Code</th>
                 <th>Incident</th>
                 <th>Police Grid</th>
-                <th>Neighborhood Number</th>
+                <th>Neighborhood Name</th>
                 <th>Block</th>
+                <th>Look-Up</th>
+                <th>Delete</th>
             </tr>
         </thead>
-        <tbody>
-            <tr v-for="(item, index) in result_array" :class="getColor(item.code)">
-                <td>{{ item.case_number }}</td>
-                <td>{{ item.date }}  {{ item.time }} </td>
-                <td>{{ item.code }}</td>
-                <td>{{ item.incident }}</td>
-                <td>{{ item.police_grid }}</td>
-                <td>{{ item.neighborhood_number }}</td>
-                <td>{{ item.block }}</td>
-            </tr>
+        <tbody v-for="(item, index) in result_array">
+                <tr v-if="this.contain(item.neighborhood_number)" ss="getColor(item.code)">
+                    <td>{{ item.case_number }}</td>
+                    <td>{{ item.date }}  {{ item.time }} </td>
+                    <td>{{ item.incident }} (code: {{ item.code }})</td>
+                    <td>{{ item.police_grid }}</td>
+                    <td>{{ this.name }}</td>
+                    <td>{{ item.block }}</td>
+                    <td><button class="green" type="button" @click="addressSearch">Search</button>
+                        <App :address_search2="item.block" /></td>
+
+                    <td><button class="red" type="button" @click="addressSearch">Delete</button></td>
+                </tr>
+            
         </tbody>
     </table>
 </template>
