@@ -62,7 +62,7 @@ export default {
         },
         onClickDelete(event){
             console.log(event);
-            this.$emit('child-delete', event);
+            this.$emit('childdelete', event);
         }
     }
 }

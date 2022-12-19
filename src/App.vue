@@ -139,8 +139,9 @@ export default {
             this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
         },
 
-        deleteForm(){
+        deleteForm(value){
             //var value = document.getElementById("delete").value;
+            //var value = SearchResult.addComponentListener();
             console.log(value);
             /*let url = 'http://localhost:8000/remove-incident?case_number='+value;
 
@@ -462,8 +463,15 @@ export default {
                 <button class="blue" type="button" @click="updateForFilters()">Search with filters</button>
             </div>
 
+
+
             <table><tr><td class="Violent center">Violent</td><td class="Property center">Property</td><td class="Other center">Other</td></tr></table>
             <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" :neighborhood_names="neighborhood_names" />
+
+            <div>
+                <child @childdelete="deleteForm"></child>
+            </div>
+
         </div>
     </div>
     <div v-if="view === 'new_incident'">
