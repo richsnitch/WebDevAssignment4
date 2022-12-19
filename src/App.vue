@@ -158,7 +158,7 @@ export default {
         },
 
         deleteForm(value){
-            //var value = document.getElementById("delete").value;
+            var value = document.getElementById("delete").value;
             //var value = SearchResult.addComponentListener();
             console.log(value);
             /*let url = 'http://localhost:8000/remove-incident?case_number='+value;
