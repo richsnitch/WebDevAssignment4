@@ -666,6 +666,9 @@ export default {
 
             <div class="grid-x grid-padding-x">
                 <h1 class="cell auto center">Video Demo</h1>
+                <div class="cell small-12 large-12 center">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/rRSP5AcqNtI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
 
