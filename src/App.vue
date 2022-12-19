@@ -402,7 +402,6 @@ export default {
         this.getJSON('http://localhost:8000/incidents?neighborhood_number=' + this.neighborhoods + '&limit=1000')
         .then((response) => {
             //incidents which are on map
-            console.log(response);
             this.incident_results = response;
             this.updateNeighborsMarkers();
 
@@ -412,12 +411,10 @@ export default {
 
         this.getJSON('http://localhost:8000/neighborhoods')
         .then((response) => {
-            console.log(response);
             let i;
             for(i=0; i<response.length; i++){
                 this.neighborhood_names.push(response[i].neighborhood_name);
             }
-            console.log(this.neighborhood_names);
 
         }).catch((err) => {
             console.log(err);
