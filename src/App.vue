@@ -663,6 +663,9 @@ export default {
 
             <div class="grid-x grid-padding-x">
                 <h1 class="cell auto center">Video Demo</h1>
+                <div class="cell small-12 large-12 center">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/rRSP5AcqNtI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
 
@@ -671,25 +674,41 @@ export default {
             <br/>
             <br/>
             <div class="grid-x grid-padding-x">
-                <h1 class="cell small-12 large-12 center">Six Interesting Things</h1>
+                <h1 class="cell large-12 center">Six Interesting Things</h1>
+                <div class="cell small-12 large-6 center">
+
+                <p>Front End development is very easy to under estimate. We realized hiccups seem to very easily arise over very small things and this makes tasks harder to do.</p>
+
+                </div>
 
                 <div class="cell small-12 large-6 center">
-                    <p>Front End development is very easy to under estimate. We realized hiccups seem to very easily arise over very small things and this makes tasks harder to do.</p>
+
+                <p>We learned more about Vue components and their relationship to their parents. It is a lot easier for a parent to pass information to a child component than it is for the same component to pass data to its parent.</p>
+
                 </div>
+
                 <div class="cell small-12 large-6 center">
-                    <p>We learned more about Vue components and their relationship to their parents. It is a lot easier for a parent to pass information to a child component than it is for the same component to pass data to its parent.</p>
+
+                <p>We learned about Leaflet and some of the many properties a map has and events that occur when a map is used.</p>
+
                 </div>
+
                 <div class="cell small-12 large-6 center">
-                    <p>We learned about Leaflet and some of the many properties a map has and events that occur when a map is used.</p>
+
+                <p>We learned more about the Nominatim API and converting from latitude and longitude to a properly formatted address.</p>
+
                 </div>
+
                 <div class="cell small-12 large-6 center">
-                    <p>We learned more about the Nominatim API and converting from latitude and longitude to a properly formatted address.</p>
+
+                <p>One thing we noticed about the data is that property crimes seem to far out number other types of crimes.</p>
+
                 </div>
+
                 <div class="cell small-12 large-6 center">
-                    <p>One thing we noticed about the data is that property crimes seem to far out number other types of crimes.</p>
-                </div>
-                <div class="cell small-12 large-6 center">
-                    <p>One thing we found very interesting is one neighborhood is called frogtown. This isn't particularily meaningful but we really enjoyed this as a group.</p>
+
+                <p>One thing we found very interesting is one neighborhood is called frogtown. This isn't particularily meaningful but we really enjoyed this as a group.</p>
+
                 </div>
             </div>
             <br/>
