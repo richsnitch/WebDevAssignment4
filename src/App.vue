@@ -124,19 +124,19 @@ export default {
                 neighborhood_number: form.elements.neighborhood_number.value,
                 block: form.elements.block.value,
             };
-            let i;
+            /*let i;
             let foundCode = 0;
             for(i = 0; i < this.codes.length; i++){ //checks if the code given is valid
                 if (formData.code == this.codes[i]){
                     foundCode = 1;
                     break;
                 }
-            }
+            }*/
             if(formData.case_number.trim() == '' || formData.date.trim() == '' || formData.time.trim() == '' || formData.code.trim() == '' ||
                 formData.incident.trim() == '' || formData.police_grid.trim() == '' || formData.neighborhood_number.trim() == '' || formData.block.trim() == ''){
                 alert("Please fill out all fields.") //if any fields were not entered
-            }else if (foundCode == 0){ //if the code given was not valid
-                alert("Invalid code number. Please try again.")
+            /*}else if (foundCode == 0){ //if the code given was not valid
+                alert("Invalid code number. Please try again.")*/
             }else{
                 axios.put("http://localhost:8000/new-incident", formData).then((response) => {
                 if (response.status >= 200 && response.status < 300){
