@@ -8,6 +8,8 @@ import SearchResult from './components/SearchResult.vue';
 //import 'vue-date-pick/dist/vueDatePick.scss';
 import $ from 'jquery';
 import axios from "axios";
+import { parserOptions } from '@vue/compiler-dom';
+
 export default {
     data() {
         return {
@@ -77,6 +79,7 @@ export default {
             limit: "1000"
         };
     },
+
     components: {
         "SearchResult": SearchResult, 
         //"datepicker": Datepicker
@@ -121,7 +124,21 @@ export default {
                 neighborhood_number: form.elements.neighborhood_number.value,
                 block: form.elements.block.value,
             };
-            axios.put("http://localhost:8000/new-incident", formData).then((response) => {
+            /*let i;
+            let foundCode = 0;
+            for(i = 0; i < this.codes.length; i++){ //checks if the code given is valid
+                if (formData.code == this.codes[i]){
+                    foundCode = 1;
+                    break;
+                }
+            }*/
+            if(formData.case_number.trim() == '' || formData.date.trim() == '' || formData.time.trim() == '' || formData.code.trim() == '' ||
+                formData.incident.trim() == '' || formData.police_grid.trim() == '' || formData.neighborhood_number.trim() == '' || formData.block.trim() == ''){
+                alert("Please fill out all fields.") //if any fields were not entered
+            /*}else if (foundCode == 0){ //if the code given was not valid
+                alert("Invalid code number. Please try again.")*/
+            }else{
+                axios.put("http://localhost:8000/new-incident", formData).then((response) => {
                 if (response.status >= 200 && response.status < 300){
                     //Success!
                     alert("New incident submitted successfully!")
@@ -137,10 +154,12 @@ export default {
                 console.log(error);
             })
             this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
+            }
         },
 
-        deleteForm(){
-            var value = document.getElementById("delete").value;
+        deleteForm(value){
+            //var value = document.getElementById("delete").value;
+            //var value = SearchResult.addComponentListener();
             console.log(value);
             /*let url = 'http://localhost:8000/remove-incident?case_number='+value;
 
@@ -408,6 +427,7 @@ export default {
 
     }
 }
+
 </script>
 
 <template>
@@ -462,8 +482,15 @@ export default {
                 <button class="blue" type="button" @click="updateForFilters()">Search with filters</button>
             </div>
 
+
+
             <table><tr><td class="Violent center">Violent</td><td class="Property center">Property</td><td class="Other center">Other</td></tr></table>
             <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" :neighborhood_names="neighborhood_names" />
+
+            <div>
+                <child @childdelete="deleteForm"></child>
+            </div>
+
         </div>
     </div>
     <div v-if="view === 'new_incident'">
@@ -480,8 +507,8 @@ export default {
                     <input type="text" placeholder="Ex: 2019-04-26" id="date" name="date" required>
                     <label for="time">Time:</label><br>
                     <input type="text" placeholder="Ex: 19:15:00" id="time" name="time" required>
-                    <label for="code">Code:</label><br>
-                    <input type="text" placeholder="Ex: 600" id="code" name="code" required>
+                    <label for ="code">Code:</label><br>
+                    <input type = "text" placeholder="Ex: 600" id="code" name="code" required>
                     <label for="incident">Incident:</label><br>
                     <input type="text" placeholder="Ex: theft" id="incident" name="incident" required>
                     <label for="police_grid">Police Grid:</label><br>
@@ -578,7 +605,7 @@ export default {
                     <h1>Studies:</h1>
                     <p>I am majoring in Computer Science, while double minoring in both Data Analytics and Applied Statistics.</p>
                     <h1>Goals After College:</h1>
-                    <p>Once I graduate (in just a few days here) I'll soon start a job as an full stack associate software developer in the Twin Cities!
+                    <p>Once I graduate (in just a few days here) I'll soon start a job as a full stack associate software developer in the Twin Cities!
                         I've wanted to work as a full stack software developer for a while now, so I'm excitied to be able to have this opportunity.
                         I'm thinking I'd like to live abroad for a few years but I have yet to decide when and where but I expect that to be on the horizon for me.
                     </p>
@@ -680,8 +707,6 @@ export default {
         <br/>
 
     </div>
-
-    
 </template>
 
 <style>

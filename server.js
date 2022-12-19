@@ -6,6 +6,7 @@ let cors = require('cors');
 // NPM modules
 let express = require('express');
 let sqlite3 = require('sqlite3');
+const { getHeapCodeStatistics } = require('v8');
 
 
 let db_filename = path.join(__dirname, 'db', 'stpaul_crime.sqlite3');
@@ -239,7 +240,6 @@ app.put('/new-incident', (req, res) => {
             columns += key + ", ";
             values += "\"" + value + "\", ";
         }
-
     }
 
     console.log(count);

@@ -59,6 +59,10 @@ export default {
                 return "Other";
             }
 
+        },
+        onClickDelete(event){
+            console.log(event);
+            this.$emit('childdelete', event);
         }
     }
 }
@@ -89,7 +93,7 @@ export default {
                     <td><button class="green" type="button" @click="addressSearch">Search</button>
                         <App :address_search2="item.block" /></td>
 
-                    <td><button class="red" type="button" @click="addressSearch">Delete</button></td>
+                    <td><button class="red" type="button" @click="onClickDelete(item.case_number)">Delete</button></td>
                 </tr>
             
         </tbody>
