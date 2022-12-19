@@ -34,30 +34,29 @@ export default {
             }
             return false;
         }, getColor(code) {
-            //console.log("in color func");
             //console.log("code = " + code);
             code = parseInt(code);
             //console.log("code = " + code);
             if(code >= 100 && code < 200) {
-                return "Homicide";
+                return "Violent";
             }
             else if((code >= 200 && code < 300) || (code >= 400 && code < 500) || (code >= 800 && code < 900)) {
-                return "Assault";
+                return "Violent";
             }
             else if((code >= 300 && code < 400) || (code >= 500 && code < 800)) {
-                return "Theft";
+                return "Property";
             }
             else if(code >= 900 && code < 1500) {
-                return "PropertyDamage";
+                return "Property";
             }
             else if(code >= 1800 && code < 1900) {
-                return "Narcotics";
+                return "Other";
             }
             else if(code == 2619) {
-                return "Weapons";
+                return "Violent";
             }
             else {
-                return "else";
+                return "Other";
             }
 
         }
@@ -150,5 +149,20 @@ th, td {
     width: 40rem;
     margin: 0;
     background-color: rgb(189, 150, 78);
+}
+.Violent {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(156, 106, 106);
+}
+.Other {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(105, 111, 161);
+}
+.Property {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(113, 172, 106);
 }
 </style>

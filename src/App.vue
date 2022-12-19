@@ -462,6 +462,7 @@ export default {
                 <button class="blue" type="button" @click="updateForFilters()">Search with filters</button>
             </div>
 
+            <table><tr><td class="Violent center">Violent</td><td class="Property center">Property</td><td class="Other center">Other</td></tr></table>
             <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" :neighborhood_names="neighborhood_names" />
         </div>
     </div>
@@ -649,7 +650,7 @@ export default {
                 <h1 class="cell small-12 large-12 center">Six Interesting Things</h1>
 
                 <div class="cell small-12 large-6 center">
-                    <p>The first thing</p>
+                    <p>Front End stuff</p>
                 </div>
                 <div class="cell small-12 large-6 center">
                     <p>The second thing</p>
@@ -703,6 +704,21 @@ export default {
     border: solid 1px white;
     text-align: center;
     cursor: pointer;
+}
+.Violent {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(156, 106, 106);
+}
+.Other {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(105, 111, 161);
+}
+.Property {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(113, 172, 106);
 }
 </style>
 
