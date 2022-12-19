@@ -327,14 +327,30 @@ export default {
             string = string.substring(0, string.length - 1);
             return string;
         },
-        updateNeighbors(){
-            //var newMarker = L.marker([44.942068, -93.020521]).addTo(this.leaflet.map);
-            //console.log("Inside");
-            
-            for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
-                this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location, {title:'Hover Text',alt:"Marker",clickable:false,draggable:false,autoClose: false}).addTo(this.leaflet.map).bindPopup("Neighborhood: " + (i+1) + " Crime Count: " + this.marker_counter[i]);
+        updateNeighborsMarkers(){
+            console.log(this.incident_results); 
+            console.log(this.incident_results[0].neighborhood_number) 
+            this.marker_counter = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; 
+            var value = 0; let i; var curr_neighbors = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; 
+
+            for(i=0; i<this.neighborhoods.length; i++){ 
+                  curr_neighbors[i] = this.neighborhoods[i]; 
+            } 
+
+            //console.log(this.neighborhoods); 
+            //console.log(curr_neighbors); 
+
+            for(i=0; i<this.incident_results.length; i++){
+                  value = this.incident_results[i].neighborhood_number; 
+                  this.marker_counter[value-1] = this.marker_counter[value-1]+1; 
             }
-        },
+
+            for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
+                  this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location, {title:'Hover     Text',alt:"Marker",clickable:false,draggable:false,autoClose: false}).addTo(this.leaflet.map).bindPopup("Neighborhood: " + (i+1) + " Crime Count: " + this.marker_counter[i]); 
+            } 
+
+            console.log(this.marker_counter);
+        }
         
     },
     mounted() {
@@ -364,13 +380,12 @@ export default {
         });
 
         //var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
-        console.log(this.neighborhoods);
         this.getJSON('http://localhost:8000/incidents?neighborhood_number=' + this.neighborhoods + '&limit=1000')
         .then((response) => {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
-            //this.updateNeighbors(); //do you want this line
+            this.updateNeighborsMarkers();
 
         }).catch((err)=> {
             console.log(err);

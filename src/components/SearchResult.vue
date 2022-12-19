@@ -34,6 +34,7 @@ export default {
             }
             return false;
         }, getColor(code) {
+            //console.log("in color func");
             //console.log("code = " + code);
             code = parseInt(code);
             //console.log("code = " + code);
@@ -79,7 +80,7 @@ export default {
             </tr>
         </thead>
         <tbody v-for="(item, index) in result_array">
-                <tr v-if="this.contain(item.neighborhood_number)" class="this.getColor(item.code)">
+                <tr v-if="this.contain(item.neighborhood_number)" :class="this.getColor(item.code)">
                     <td>{{ item.case_number }}</td>
                     <td>{{ item.date }}  {{ item.time }} </td>
                     <td>{{ item.incident }} (code: {{ item.code }})</td>
