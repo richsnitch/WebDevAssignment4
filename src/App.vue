@@ -1,7 +1,12 @@
 <script>
 import { isTemplateNode } from '@vue/compiler-core';
-import SearchResult from './components/SearchResult.vue'
-import $ from 'jquery'
+import SearchResult from './components/SearchResult.vue';
+//import DatePick from "vue-date-pick";
+//import Datepicker from 'vuejs-datepicker';
+//import Datepicker from "vuepic/vue-datepicker";
+//import '@vuepic/vue-datepicker/dist/main.css'
+//import 'vue-date-pick/dist/vueDatePick.scss';
+import $ from 'jquery';
 import axios from "axios";
 import { parserOptions } from '@vue/compiler-dom';
 
@@ -22,13 +27,7 @@ export default {
             code: "",
             incident: "",
             neighborhood_number: "",
-            neighborhoods: [3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17],
-            codes: [100,110,120,210,220,300,311,312,313,314,321,322,323,324,331,333,334,341,342,343,344,351,352,353,354,361,363,364,371,372,373,374,400,
-                410,411,412,420,421,422,430,431,432,440,441,442,450,451,452,453,500,510,511,513,515,516,520,521,523,525,526,530,531,533,535,536,540,541,
-                543,545,546,440,551,553,555,556,560,561,563,565,566,600,603,611,612,613,614,621,622,623,630,631,632,633,640,641,642,643,651,652,653,661,
-                662,663,671,672,673,681,682,683,691,692,693,700,710,711,712,720,721,722,730,731,732,810,861,862,863,900,901,903,905,911,913,915,921,922,
-                923,925,931,933,941,942,951,961,971,972,975,981,982,1400,1401,1410,1415,1416,1420,1425,1426,1430,1435,1436,1800,1810,1811,1812,1813,1814,
-                1815,1820,1822,1823,1824,1825,1830,1835,1840,1841,1842,1843,1844,1845,1850,1855,1860,1865,1870,1880,1885,2619,3100,9954,9959,9986],
+            neighborhoods: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
             police_grid: "",
             block: "",
             leaflet: {
@@ -62,13 +61,28 @@ export default {
                     {location: [44.937705, -93.136997], marker: null},
                     {location: [44.949203, -93.093739], marker: null}
                 ]
-                
-            }
+            },
+            input_placeholder: "Enter a location here",
+
+            filtersT: [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ],
+            checked_filtersT: [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ],
+            checked_allT: true,
+
+            filtersN: [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ],
+            checked_filtersN: [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ],
+            checked_allN: true,
+
+            start_date: "2014-01-01",
+            end_date: "2022-01-01",
+
+            limit: "1000"
         };
     },
 
     components: {
-        SearchResult
+        "SearchResult": SearchResult, 
+        //"datepicker": Datepicker
+        //"date-pick" : DatePick
     },
 
     methods: {
@@ -78,6 +92,24 @@ export default {
 
         viewNewIncident(event) {
             this.view = 'new_incident'; 
+        },
+        check_allT() {
+            if(this.checked_allT == false) {
+                this.checked_filtersT = [ "Homicide", "Assault", "Theft", "PropertyDamage", "Narcotics", "Weapons" ];
+            }
+            else {
+                this.checked_filtersT = [];
+            }
+            
+        },
+        check_allN() {
+            if(this.checked_allN == false) {
+                this.checked_filtersN = [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 ];
+            }
+            else {
+                this.checked_filtersN = [];
+            }
+            
         },
 
         submitForm(){
@@ -124,8 +156,9 @@ export default {
             }
         },
 
-        deleteForm(){
-            var value = document.getElementById("delete").value;
+        deleteForm(value){
+            //var value = document.getElementById("delete").value;
+            //var value = SearchResult.addComponentListener();
             console.log(value);
             /*let url = 'http://localhost:8000/remove-incident?case_number='+value;
 
@@ -270,14 +303,72 @@ export default {
                 value = this.incident_results[i].neighborhood_number;
                 this.marker_counter[value-1] = this.marker_counter[value-1]+1;
             }
+            console.log("neighborhoods: " + neighborhoods);
+            let url = 'http://localhost:8000/incidents?limit=' + this.limit + '&neighborhood_number='+neighborhoods + this.getFilterForSQL()+ "&start_date=" + this.start_date + "&end_date=" + this.end_date;
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
 
             console.log(this.marker_counter);
 
+        },
+        updateForFilters() {
+            let url = 'http://localhost:8000/incidents?limit=' + this.limit + this.getNumberForSQL() +  this.getFilterForSQL() + "&start_date=" + this.start_date + "&end_date=" + this.end_date;
+            console.log(url);
+            this.getJSON(url).then((response) => {
+                console.log(response);
+                this.incident_results = response;
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        getFilterForSQL() {
+            let string = "&filter=";
+            let i = 0;
+            for(i = 0;i < this.checked_filtersT.length; i++) {
+                string = string + this.checked_filtersT[i] + ",";
+            }
+            string = string.substring(0, string.length - 1);
+            console.log(string);
+            return string;
+        },
+        getNumberForSQL() {
+            let string = "&neighborhood_number=";
+            if(this.checked_filtersN.length == 0) { return string; }
+            let i = 0;
+            for(i = 0;i < this.checked_filtersN.length; i++) {
+                string = string + this.checked_filtersN[i] + ",";
+            }
+            string = string.substring(0, string.length - 1);
+            return string;
+        },
+        updateNeighborsMarkers(){
+            console.log(this.incident_results); 
+            console.log(this.incident_results[0].neighborhood_number) 
+            this.marker_counter = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; 
+            var value = 0; let i; var curr_neighbors = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; 
+
+            for(i=0; i<this.neighborhoods.length; i++){ 
+                  curr_neighbors[i] = this.neighborhoods[i]; 
+            } 
+
+            //console.log(this.neighborhoods); 
+            //console.log(curr_neighbors); 
+
+            for(i=0; i<this.incident_results.length; i++){
+                  value = this.incident_results[i].neighborhood_number; 
+                  this.marker_counter[value-1] = this.marker_counter[value-1]+1; 
+            }
 
             for(let i=0; i<this.leaflet.neighborhood_markers.length; i++){
-                this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location, {title:'Hover Text',alt:"Marker",clickable:false,draggable:false,autoClose: false}).addTo(this.leaflet.map).bindPopup("Neighborhood: " + (i+1) + " Crime Count: " + this.marker_counter[i]);
-            }
-        },
+                  this.leaflet.neighborhood_markers[i].marker = L.marker(this.leaflet.neighborhood_markers[i].location, {title:'Hover     Text',alt:"Marker",clickable:false,draggable:false,autoClose: false}).addTo(this.leaflet.map).bindPopup("Neighborhood: " + (i+1) + " Crime Count: " + this.marker_counter[i]); 
+            } 
+
+            console.log(this.marker_counter);
+        }
         
     },
     mounted() {
@@ -307,19 +398,18 @@ export default {
         });
 
         //var newMarker = L.marker([45.483658, -93.017977]).addTo(this.leaflet.map);
-        console.log(this.neighborhoods);
         this.getJSON('http://localhost:8000/incidents?neighborhood_number=' + this.neighborhoods + '&limit=1000')
         .then((response) => {
             //incidents which are on map
             console.log(response);
             this.incident_results = response;
-            //this.updateNeighbors(); //do you want this line
+            this.updateNeighborsMarkers();
 
         }).catch((err)=> {
             console.log(err);
         });
 
-        /*this.getJSON('http://localhost:8000/neighborhoods')
+        this.getJSON('http://localhost:8000/neighborhoods')
         .then((response) => {
             console.log(response);
             let i;
@@ -330,7 +420,7 @@ export default {
 
         }).catch((err) => {
             console.log(err);
-        })*/
+        })
 
         this.leaflet.map.on('moveend', this.updateIncidents);
 
@@ -361,9 +451,45 @@ export default {
 
             <div class="grid-x grid-padding-x">
                 <div id="leafletmap" class="cell auto"></div>
+                
+            </div>
+            <div  id="filtersT" class="cell auto">
+                <span>Crime Types: </span>
+                <span v-for="filter in filtersT"> 
+                    <input type="checkbox" v-bind:id="filter" v-bind:value="filter" v-model="checked_filtersT"/> 
+                    <label>{{filter}}</label>
+                </span>
+                <span><input type ="checkbox" @click='check_allT()' v-bind:value="checked_allT" v-model="checked_allT"/><label>Check All</label></span>
+            </div>
+            <div  id="filtersN" class="cell auto">
+                <span>Neighborhood Numbers: </span>
+                <span v-for="filter in filtersN"> 
+                    <input type="checkbox" v-bind:id="filter" v-bind:value="filter" v-model="checked_filtersN"/> 
+                    <label>{{filter}}</label>
+                </span>
+                <span><input type ="checkbox" @click='check_allN()' v-bind:value="checked_allN" v-model="checked_allN"/><label>Check All</label></span>
+            </div>
+            <div>
+                <span><label>Please enter a start date </label>
+                <input type="text" v-model="start_date"></span>
+                <span><label>Please enter an end date </label>
+                <input type="text" v-model="end_date"></span>
+            </div>
+            <div>
+                <label>Please enter an upper limit for the number of results: </label>
+                <input type="text" v-model="limit">
+                <button class="blue" type="button" @click="updateForFilters()">Search with filters</button>
             </div>
 
+
+
+            <table><tr><td class="Violent center">Violent</td><td class="Property center">Property</td><td class="Other center">Other</td></tr></table>
             <SearchResult :result_array="incident_results" :neighborhoods="neighborhoods" :neighborhood_names="neighborhood_names" />
+
+            <div>
+                <child @childdelete="deleteForm"></child>
+            </div>
+
         </div>
     </div>
     <div v-if="view === 'new_incident'">
@@ -455,10 +581,15 @@ export default {
             <br/>
 
             <div class="grid-x grid-padding-x">
-                <div class="cell small-12 large-6 center"><img src ="../images/picofjoe.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
+                <div class="cell small-12 large-6 center"><img src ="../images/picofaudrey.jpg" class="floatleft rcor" alt="Picture of Joseph Schoen"/></div> 
                 <div class="cell center small-12 large-6 ">
                     <h1>Name:</h1>
                     <p>My name is Audrey Jenkins</p>
+                    <br/>
+                    <h1>Studies:</h1>
+                    <p>I am majoring in computer science and minoring in sustainability and statistics</p>
+                    <h1>Goals After College:</h1>
+                    <p>Once I graduate in the spring, I hope to look for work as a software engineer. I do not have a specific field of work in mind, but game design is interesting to me</p>
 
                 </div>
             </div>
@@ -545,7 +676,7 @@ export default {
                 <h1 class="cell small-12 large-12 center">Six Interesting Things</h1>
 
                 <div class="cell small-12 large-6 center">
-                    <p>The first thing</p>
+                    <p>Front End stuff</p>
                 </div>
                 <div class="cell small-12 large-6 center">
                     <p>The second thing</p>
@@ -597,6 +728,21 @@ export default {
     border: solid 1px white;
     text-align: center;
     cursor: pointer;
+}
+.Violent {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(156, 106, 106);
+}
+.Other {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(105, 111, 161);
+}
+.Property {
+    width: 40rem;
+    margin: 0;
+    background-color: rgb(113, 172, 106);
 }
 </style>
 
