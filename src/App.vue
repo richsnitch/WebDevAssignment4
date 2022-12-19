@@ -3,6 +3,8 @@ import { isTemplateNode } from '@vue/compiler-core';
 import SearchResult from './components/SearchResult.vue'
 import $ from 'jquery'
 import axios from "axios";
+import { parserOptions } from '@vue/compiler-dom';
+
 export default {
     data() {
         return {
@@ -20,7 +22,13 @@ export default {
             code: "",
             incident: "",
             neighborhood_number: "",
-            neighborhoods: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+            neighborhoods: [3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17],
+            codes: [100,110,120,210,220,300,311,312,313,314,321,322,323,324,331,333,334,341,342,343,344,351,352,353,354,361,363,364,371,372,373,374,400,
+                410,411,412,420,421,422,430,431,432,440,441,442,450,451,452,453,500,510,511,513,515,516,520,521,523,525,526,530,531,533,535,536,540,541,
+                543,545,546,440,551,553,555,556,560,561,563,565,566,600,603,611,612,613,614,621,622,623,630,631,632,633,640,641,642,643,651,652,653,661,
+                662,663,671,672,673,681,682,683,691,692,693,700,710,711,712,720,721,722,730,731,732,810,861,862,863,900,901,903,905,911,913,915,921,922,
+                923,925,931,933,941,942,951,961,971,972,975,981,982,1400,1401,1410,1415,1416,1420,1425,1426,1430,1435,1436,1800,1810,1811,1812,1813,1814,
+                1815,1820,1822,1823,1824,1825,1830,1835,1840,1841,1842,1843,1844,1845,1850,1855,1860,1865,1870,1880,1885,2619,3100,9954,9959,9986],
             police_grid: "",
             block: "",
             leaflet: {
@@ -58,6 +66,7 @@ export default {
             }
         };
     },
+
     components: {
         SearchResult
     },
@@ -82,7 +91,21 @@ export default {
                 neighborhood_number: form.elements.neighborhood_number.value,
                 block: form.elements.block.value,
             };
-            axios.put("http://localhost:8000/new-incident", formData).then((response) => {
+            let i;
+            let foundCode = 0;
+            for(i = 0; i < this.codes.length; i++){ //checks if the code given is valid
+                if (formData.code == this.codes[i]){
+                    foundCode = 1;
+                    break;
+                }
+            }
+            if(formData.case_number.trim() == '' || formData.date.trim() == '' || formData.time.trim() == '' || formData.code.trim() == '' ||
+                formData.incident.trim() == '' || formData.police_grid.trim() == '' || formData.neighborhood_number.trim() == '' || formData.block.trim() == ''){
+                alert("Please fill out all fields.") //if any fields were not entered
+            }else if (foundCode == 0){ //if the code given was not valid
+                alert("Invalid code number. Please try again.")
+            }else{
+                axios.put("http://localhost:8000/new-incident", formData).then((response) => {
                 if (response.status >= 200 && response.status < 300){
                     //Success!
                     alert("New incident submitted successfully!")
@@ -98,6 +121,7 @@ export default {
                 console.log(error);
             })
             this.$refs.form.reset(); //deletes all items inputted into the form on the webpage after submission
+            }
         },
 
         deleteForm(){
@@ -312,6 +336,7 @@ export default {
 
     }
 }
+
 </script>
 
 <template>
@@ -355,8 +380,8 @@ export default {
                     <input type="text" placeholder="Ex: 2019-04-26" id="date" name="date" required>
                     <label for="time">Time:</label><br>
                     <input type="text" placeholder="Ex: 19:15:00" id="time" name="time" required>
-                    <label for="code">Code:</label><br>
-                    <input type="text" placeholder="Ex: 600" id="code" name="code" required>
+                    <label for ="code">Code:</label><br>
+                    <input type = "text" placeholder="Ex: 600" id="code" name="code" required>
                     <label for="incident">Incident:</label><br>
                     <input type="text" placeholder="Ex: theft" id="incident" name="incident" required>
                     <label for="police_grid">Police Grid:</label><br>
@@ -448,7 +473,7 @@ export default {
                     <h1>Studies:</h1>
                     <p>I am majoring in Computer Science, while double minoring in both Data Analytics and Applied Statistics.</p>
                     <h1>Goals After College:</h1>
-                    <p>Once I graduate (in just a few days here) I'll soon start a job as an full stack associate software developer in the Twin Cities!
+                    <p>Once I graduate (in just a few days here) I'll soon start a job as a full stack associate software developer in the Twin Cities!
                         I've wanted to work as a full stack software developer for a while now, so I'm excitied to be able to have this opportunity.
                         I'm thinking I'd like to live abroad for a few years but I have yet to decide when and where but I expect that to be on the horizon for me.
                     </p>
@@ -551,8 +576,6 @@ export default {
         <br/>
 
     </div>
-
-    
 </template>
 
 <style>
